@@ -787,6 +787,11 @@ Return ONLY this JSON with no extra text:
             </div>
 
             <button onClick={reset} className="reset-btn">{t.newAnalysis}</button>
+            <div style={{ textAlign: "center", padding: "16px", marginTop: "8px", borderTop: "1px solid rgba(255,255,255,0.05)", color: "#2a3a4a", fontSize: "0.75rem", lineHeight: "1.8" }}>
+  © {new Date().getFullYear()} RareDx. All Rights Reserved.<br/>
+  Built by Team Laksitha · Powered by Gemini AI · Deployed on Vercel<br/>
+  🧬 Turning Years of Suffering into Seconds of Clarity
+</div>
           </div>
         )}
       </div>
