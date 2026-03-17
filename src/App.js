@@ -1,3 +1,4 @@
+import { matchDiseases } from './diseaseDatabase';
 import { useState, useRef, useEffect } from "react";
 
 const TRANSLATIONS = {
@@ -13,7 +14,7 @@ const TRANSLATIONS = {
     bodyParts: "Affected Body Parts", selected: "Selected",
     uploadReport: "Upload Medical Report (optional)", uploadReady: "ready",
     analyzeBtn: "Analyze Symptoms", analyzingTitle: "Analyzing symptoms...",
-    analyzingSubtitle: "Cross-referencing 7,000+ rare diseases",
+    analyzingSubtitle: "Cross-referencing 100+ verified rare diseases",
     step1: "Analyzing symptom patterns...", step2: "Checking rare disease database...", step3: "Generating diagnosis report...",
     caseSummary: "Case Summary", printReport: "Print", reportFindings: "Report Findings",
     urgency: "Urgency", possibleConditions: "Possible Conditions", confidence: "Confidence",
@@ -45,7 +46,7 @@ const TRANSLATIONS = {
     bodyParts: "பாதிக்கப்பட்ட உடல் பாகங்கள்", selected: "தேர்ந்தெடுக்கப்பட்டது",
     uploadReport: "மருத்துவ அறிக்கை பதிவேற்றவும்", uploadReady: "தயார்",
     analyzeBtn: "பகுப்பாய்வு செய்க", analyzingTitle: "பகுப்பாய்வு செய்கிறோம்...",
-    analyzingSubtitle: "7,000+ அரிய நோய்களை சரிபார்க்கிறோம்",
+    analyzingSubtitle: "100+ அரிய நோய்களை சரிபார்க்கிறோம்",
     step1: "அறிகுறி வடிவங்களை பகுப்பாய்வு...", step2: "நோய் தரவுத்தளம் சரிபார்க்கிறோம்...", step3: "அறிக்கை உருவாக்குகிறோம்...",
     caseSummary: "வழக்கு சுருக்கம்", printReport: "அச்சிடுக", reportFindings: "அறிக்கை கண்டுபிடிப்புகள்",
     urgency: "அவசரம்", possibleConditions: "சாத்தியமான நிலைமைகள்", confidence: "நம்பிக்கை",
@@ -77,7 +78,7 @@ const TRANSLATIONS = {
     bodyParts: "प्रभावित शरीर के अंग", selected: "चयनित",
     uploadReport: "चिकित्सा रिपोर्ट अपलोड करें", uploadReady: "तैयार",
     analyzeBtn: "विश्लेषण करें", analyzingTitle: "विश्लेषण हो रहा है...",
-    analyzingSubtitle: "7,000+ दुर्लभ बीमारियों की जाँच",
+    analyzingSubtitle: "100+ दुर्लभ बीमारियों की जाँच",
     step1: "लक्षण पैटर्न का विश्लेषण...", step2: "रोग डेटाबेस की जाँच...", step3: "निदान रिपोर्ट तैयार...",
     caseSummary: "केस सारांश", printReport: "प्रिंट", reportFindings: "रिपोर्ट निष्कर्ष",
     urgency: "तात्कालिकता", possibleConditions: "संभावित स्थितियाँ", confidence: "विश्वास",
@@ -109,7 +110,7 @@ const TRANSLATIONS = {
     bodyParts: "ప్రభావిత శరీర భాగాలు", selected: "ఎంచుకున్నవి",
     uploadReport: "వైద్య నివేదిక అప్‌లోడ్", uploadReady: "సిద్ధంగా ఉంది",
     analyzeBtn: "విశ్లేషించండి", analyzingTitle: "విశ్లేషిస్తోంది...",
-    analyzingSubtitle: "7,000+ అరుదైన వ్యాధులను తనిఖీ చేస్తోంది",
+    analyzingSubtitle: "100+ అరుదైన వ్యాధులను తనిఖీ చేస్తోంది",
     step1: "లక్షణ నమూనాలు విశ్లేషిస్తోంది...", step2: "వ్యాధి డేటాబేస్ తనిఖీ...", step3: "నివేదిక రూపొందిస్తోంది...",
     caseSummary: "కేసు సారాంశం", printReport: "ముద్రించు", reportFindings: "నివేదిక ఫలితాలు",
     urgency: "అత్యవసరత", possibleConditions: "సాధ్యమయ్యే పరిస్థితులు", confidence: "విశ్వాసం",
@@ -141,7 +142,7 @@ const TRANSLATIONS = {
     bodyParts: "ബാധിച്ച ശരീരഭാഗങ്ങൾ", selected: "തിരഞ്ഞെടുത്തത്",
     uploadReport: "മെഡിക്കൽ റിപ്പോർട്ട് അപ്‌ലോഡ്", uploadReady: "തയ്യാർ",
     analyzeBtn: "വിശകലനം ചെയ്യുക", analyzingTitle: "വിശകലനം ചെയ്യുന്നു...",
-    analyzingSubtitle: "7,000+ അപൂർവ രോഗങ്ങൾ പരിശോധിക്കുന്നു",
+    analyzingSubtitle: "100+ അപൂർവ രോഗങ്ങൾ പരിശോധിക്കുന്നു",
     step1: "ലക്ഷണ പാറ്റേണുകൾ...", step2: "ഡാറ്റാബേസ് തനിഖ...", step3: "റിപ്പോർട്ട് തയ്യാറാക്കുന്നു...",
     caseSummary: "കേസ് സംഗ്രഹം", printReport: "പ്രിന്റ്", reportFindings: "റിപ്പോർട്ട് കണ്ടെത്തലുകൾ",
     urgency: "അടിയന്തിരത", possibleConditions: "സാധ്യമായ അവസ്ഥകൾ", confidence: "ആത്മവിശ്വാസം",
@@ -379,8 +380,56 @@ export default function App() {
     setReminderSet(true);
   };
 
-  const analyze = async () => {
-    setStep("loading");
+   const analyze = async () => {
+  setStep("loading");
+  const key = process.env.REACT_APP_GEMINI_API_KEY;
+  const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key;
+
+  // Step 1: Match against real Orphanet database
+  const dbMatches = matchDiseases(form.symptoms);
+  const topDiseasesFromDB = dbMatches.map(d => `${d.name} (matched symptoms: ${d.matchedSymptoms.join(", ")})`).join("\n");
+
+  const bodyPartsText = selectedBodyParts.length > 0 ? `Affected body parts: ${selectedBodyParts.join(", ")}` : "";
+  const severityText = SEVERITY_SYMPTOMS.map(s => `${s} severity: ${form["severity_" + s]}/10`).join(", ");
+  const langInstruction = selectedLanguage !== "en" ? `Respond with disease names in English but summary, advice and descriptions in ${LANGUAGES.find(l => l.code === selectedLanguage)?.label}.` : "";
+
+  // Step 2: Use Gemini only to explain and enrich — not to guess diseases
+  const prompt = `You are a rare disease diagnostic assistant. Based on verified Orphanet database matching, these diseases were identified as possible matches:
+
+${topDiseasesFromDB}
+
+Patient info:
+Age: ${form.age}, Gender: ${form.gender}, Symptoms: ${form.symptoms}
+Severity: ${severityText}
+${bodyPartsText}
+Duration: ${form.duration}, Tests done: ${form.testsAlreadyDone}
+${uploadedFile ? `Medical report "${uploadedFile.name}" uploaded. Consider this too.` : ""}
+${langInstruction}
+
+Based on the Orphanet database matches above AND patient info, provide enriched diagnosis. Return ONLY this JSON:
+{"summary":"brief summary","reportFindings":"${uploadedFile ? "key findings" : ""}","riskScore":72,"similarStories":["Real patient story 1","Real patient story 2","Real patient story 3"],"possibleConditions":[{"name":"Disease name from matches above","confidence":"High/Medium/Low","confidencePercent":85,"description":"brief description","affectedPeople":"number","avgDiagnosisTime":"time","nextSteps":"tests/specialists","treatmentTimeline":["Week 1-2: Initial tests","Month 1: Specialist","Month 2-3: Treatment","Month 6+: Monitoring"]}],"urgency":"Immediate/Soon/Routine","generalAdvice":"advice","dietTips":[{"icon":"🥗","category":"Diet","advice":"advice"},{"icon":"💧","category":"Hydration","advice":"advice"},{"icon":"🏃","category":"Exercise","advice":"advice"},{"icon":"😴","category":"Sleep","advice":"advice"},{"icon":"🧘","category":"Stress","advice":"advice"}]}`;
+
+  try {
+    const parts = [];
+    if (uploadedFileBase64 && uploadedFileMime) parts.push({ inline_data: { mime_type: uploadedFileMime, data: uploadedFileBase64 } });
+    parts.push({ text: prompt });
+    const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts }] }) });
+    const data = await response.json();
+    const text = data.candidates[0].content.parts[0].text;
+    const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
+    const newEntry = {
+      id: Date.now(), date: new Date().toLocaleDateString(),
+      age: form.age, gender: form.gender, symptoms: form.symptoms,
+      urgency: parsed.urgency, conditions: parsed.possibleConditions.map(c => c.name).join(", "),
+    };
+    const updatedHistory = [newEntry, ...history].slice(0, 10);
+    setHistory(updatedHistory);
+    localStorage.setItem("raredx_history", JSON.stringify(updatedHistory));
+    setResult(parsed);
+    setChatMessages([{ role: "assistant", text: uploadedFile ? t.chatWelcomeReport : t.chatWelcome }]);
+    setStep("result");
+  } catch { alert("Something went wrong. Check your API key."); setStep("form"); }
+};
     setReminderSet(false);
     const key = process.env.REACT_APP_GEMINI_API_KEY;
     const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key;
@@ -455,7 +504,7 @@ Return ONLY this JSON with no extra text:
           </div>
           <p>{t.subtitle}</p>
           <div className="stats">
-            {[["300M+", t.stat1], ["7,000+", t.stat2], ["4–5 yrs", t.stat3]].map(([n, l]) => (
+            {[["300M+", t.stat1], ["100+", t.stat2], ["4–5 yrs", t.stat3]].map(([n, l]) => (
               <div key={n} className="stat-card"><div className="stat-num">{n}</div><div className="stat-label">{l}</div></div>
             ))}
           </div>
