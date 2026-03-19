@@ -1,6 +1,6 @@
 import { matchDiseases } from './diseaseDatabase';
 import { useState, useRef, useEffect } from "react";
-
+ 
 const TRANSLATIONS = {
   en: {
     title: "RareDx", subtitle: "AI-powered Rare Disease Diagnosis Assistant",
@@ -73,13 +73,13 @@ const TRANSLATIONS = {
     gender: "लिंग", genderPlaceholder: "जैसे महिला",
     duration: "लक्षणों की अवधि", durationPlaceholder: "जैसे 6 महीने",
     tests: "पहले किए गए परीक्षण", testsPlaceholder: "जैसे रक्त परीक्षण सामान्य",
-    symptoms: "लक्षण", symptomsPlaceholder: "लक्षण बताएं...",
+    symptoms: "लक्षणालु", symptomsPlaceholder: "लक्षण बताएं...",
     voiceBtn: "🎤 आवाज़", listeningBtn: "🔴 सुन रहा है...",
     bodyParts: "प्रभावित शरीर के अंग", selected: "चयनित",
     uploadReport: "चिकित्सा रिपोर्ट अपलोड करें", uploadReady: "तैयार",
     analyzeBtn: "विश्लेषण करें", analyzingTitle: "विश्लेषण हो रहा है...",
     analyzingSubtitle: "100+ दुर्लभ बीमारियों की जाँच",
-    step1: "लक्षण पैटर्न का विश्लेषण...", step2: "रोग डेटाबेस की जाँच...", step3: "निदान रिपोर्ट तैयार...",
+    step1: "लक्षण पैटर्न का विश्लेषण...", step2: "वीर डेटाबेस की जाँच...", step3: "निदान रिपोर्ट तैयार...",
     caseSummary: "केस सारांश", printReport: "प्रिंट", reportFindings: "रिपोर्ट निष्कर्ष",
     urgency: "तात्कालिकता", possibleConditions: "संभावित स्थितियाँ", confidence: "विश्वास",
     affected: "प्रभावित", avgDiagnosis: "औसत निदान", nextSteps: "अगले कदम",
@@ -89,7 +89,7 @@ const TRANSLATIONS = {
     sendBtn: "भेजें", secondOpinion: "दूसरी राय लें",
     secondOpinionDesc: "नए दृष्टिकोण के लिए पुनः विश्लेषण करें।",
     secondOpinionBtn: "दूसरी राय विश्लेषण", disclaimer: "चिकित्सा अस्वीकरण",
-    disclaimerText1: "RareDx एक AI सूचनात्मक उपकरण है। यह",
+    disclaimerText1: "RareDx एक AI सूचनात्मक उपकरण है। इदिका",
     disclaimerBold: "पेशेवर चिकित्सा सलाह का विकल्श नहीं है।",
     disclaimerText2: "हमेशा अपने चिकित्सक की सलाह लें।",
     disclaimerFooter: "© 2025 RareDx • केवल शैक्षिक उद्देश्यों के लिए",
@@ -107,14 +107,14 @@ const TRANSLATIONS = {
     tests: "ఇప్పటికే చేసిన పరీక్షలు", testsPlaceholder: "ఉదా. రక్త పరీక్ష సాధారణం",
     symptoms: "లక్షణాలు", symptomsPlaceholder: "లక్షణాలు వివరించండి...",
     voiceBtn: "🎤 వాయిస్", listeningBtn: "🔴 వింటోంది...",
-    bodyParts: "ప్రభావిత శరీర భాగాలు", selected: "ఎంచుకున్నవి",
+    bodyParts: "ప్రभावित శరీర భాగాలు", selected: "ఎంచుకున్నవి",
     uploadReport: "వైద్య నివేదిక అప్‌లోడ్", uploadReady: "సిద్ధంగా ఉంది",
     analyzeBtn: "విశ్లేషించండి", analyzingTitle: "విశ్లేషిస్తోంది...",
     analyzingSubtitle: "100+ అరుదైన వ్యాధులను తనిఖీ చేస్తోంది",
     step1: "లక్షణ నమూనాలు విశ్లేషిస్తోంది...", step2: "వ్యాధి డేటాబేస్ తనిఖీ...", step3: "నివేదిక రూపొందిస్తోంది...",
     caseSummary: "కేసు సారాంశం", printReport: "ముద్రించు", reportFindings: "నివేదిక ఫలితాలు",
-    urgency: "అత్యవసరత", possibleConditions: "సాధ్యమయ్యే పరిస్థితులు", confidence: "విశ్వాసం",
-    affected: "ప్రభావితులు", avgDiagnosis: "సగటు నిర్ధారణ", nextSteps: "తదుపరి దశలు",
+    urgency: "అత్యవసరత", possibleConditions: "సాధ్యమానే పరిస్థితులు", confidence: "విశ్వాసం",
+    affected: "ప్రभावितులు", avgDiagnosis: "సగటు నిర్ధారణ", nextSteps: "அடுத்த ఘட్టాలు",
     generalAdvice: "సాధారణ సలహా", findSpecialist: "నిపుణుడిని కనుగొనండి",
     findBtn: "నిపుణుడు", findClinic: "అరుదైన వ్యాధి క్లినిక్",
     chatTitle: "నిర్ధారణ గురించి అడగండి", chatPlaceholder: "ఏదైనా అడగండి...",
@@ -124,7 +124,7 @@ const TRANSLATIONS = {
     disclaimerText1: "RareDx ఒక AI సమాచార సాధనం. ఇది",
     disclaimerBold: "వృత్తిపరమైన వైద్య సలహాకు ప్రత్యామ్నాయం కాదు.",
     disclaimerText2: "ఎల్లప్పుడూ మీ వైద్యుని సలహా తీసుకోండి.",
-    disclaimerFooter: "© 2025 RareDx • విద్యా ప్రయోజనాల కోసం మాత్రమే",
+    disclaimerFooter: "© 2025 RareDx • విద్యా ప్రయోజనాల కోసం మాత్రం",
     newAnalysis: "← కొత్త విశ్లేషణ", emergencyTitle: "తక్షణ వైద్య సహాయం అవసరం!",
     emergencyDesc: "దయచేసి వెంటనే అత్యవసర సంరక్షణ తీసుకోండి.",
     emergencyBtn: "సమీప ఆసుపత్రి", chatWelcome: "లక్షణాలను విశ్లేషించాను. అడగండి!",
@@ -163,7 +163,7 @@ const TRANSLATIONS = {
     chatWelcomeReport: "ലക്ഷണങ്ങളും റിപ്പോർട്ടും വിശകലനം ചെയ്തു!", match: "പൊരുത്തം",
   },
 };
-
+ 
 const BODY_PARTS = [
   { id: "head", label: "Head", icon: "🧠" }, { id: "neck", label: "Neck", icon: "🔗" },
   { id: "chest", label: "Chest", icon: "❤️" }, { id: "abdomen", label: "Abdomen", icon: "🫁" },
@@ -171,15 +171,15 @@ const BODY_PARTS = [
   { id: "rightArm", label: "Right Arm", icon: "💪" }, { id: "leftLeg", label: "Left Leg", icon: "🦵" },
   { id: "rightLeg", label: "Right Leg", icon: "🦵" }, { id: "joints", label: "Joints", icon: "⚙️" },
 ];
-
+ 
 const LANGUAGES = [
   { code: "en", label: "EN" }, { code: "ta", label: "தமிழ்" },
   { code: "hi", label: "हिंदी" }, { code: "te", label: "తెలుగు" },
   { code: "ml", label: "മലയാളം" },
 ];
-
+ 
 const SEVERITY_SYMPTOMS = ["Pain", "Fatigue", "Fever", "Nausea"];
-
+ 
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -310,7 +310,7 @@ const css = `
   .second-opinion-desc { color: #5a7a9a; font-size: 0.84rem; margin-bottom: 14px; line-height: 1.6; }
   input[type=range] { accent-color: #4d9fff; }
 `;
-
+ 
 export default function App() {
   const [step, setStep] = useState("form");
   const [result, setResult] = useState(null);
@@ -333,17 +333,17 @@ export default function App() {
     severity_Pain: 0, severity_Fatigue: 0, severity_Fever: 0, severity_Nausea: 0,
   });
   const recognitionRef = useRef(null);
-
+ 
   useEffect(() => {
     const style = document.createElement("style");
     style.textContent = css;
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
   }, []);
-
+ 
   const t = TRANSLATIONS[selectedLanguage];
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
+ 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -352,11 +352,11 @@ export default function App() {
     reader.onload = () => { setUploadedFileBase64(reader.result.split(",")[1]); setUploadedFileMime(file.type); };
     reader.readAsDataURL(file);
   };
-
+ 
   const toggleBodyPart = (part) => {
     setSelectedBodyParts(prev => prev.includes(part.label) ? prev.filter(p => p !== part.label) : [...prev, part.label]);
   };
-
+ 
   const startVoice = () => {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) { alert("Voice input not supported. Try Chrome!"); return; }
@@ -368,7 +368,7 @@ export default function App() {
     r.onerror = () => setIsListening(false);
     recognitionRef.current = r; r.start();
   };
-
+ 
   const setAppointmentReminder = () => {
     const date = new Date();
     date.setDate(date.getDate() + 7);
@@ -379,72 +379,25 @@ export default function App() {
     window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${dateStr}/${endStr}`, "_blank");
     setReminderSet(true);
   };
-
-   const analyze = async () => {
-  setStep("loading");
-  const key = process.env.REACT_APP_GEMINI_API_KEY;
-  const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key;
-
-  // Step 1: Match against real Orphanet database
-  const dbMatches = matchDiseases(form.symptoms);
-  const topDiseasesFromDB = dbMatches.map(d => `${d.name} (matched symptoms: ${d.matchedSymptoms.join(", ")})`).join("\n");
-
-  const bodyPartsText = selectedBodyParts.length > 0 ? `Affected body parts: ${selectedBodyParts.join(", ")}` : "";
-  const severityText = SEVERITY_SYMPTOMS.map(s => `${s} severity: ${form["severity_" + s]}/10`).join(", ");
-  const langInstruction = selectedLanguage !== "en" ? `Respond with disease names in English but summary, advice and descriptions in ${LANGUAGES.find(l => l.code === selectedLanguage)?.label}.` : "";
-
-  // Step 2: Use Gemini only to explain and enrich — not to guess diseases
-  const prompt = `You are a rare disease diagnostic assistant. Based on verified Orphanet database matching, these diseases were identified as possible matches:
-
-${topDiseasesFromDB}
-
-Patient info:
-Age: ${form.age}, Gender: ${form.gender}, Symptoms: ${form.symptoms}
-Severity: ${severityText}
-${bodyPartsText}
-Duration: ${form.duration}, Tests done: ${form.testsAlreadyDone}
-${uploadedFile ? `Medical report "${uploadedFile.name}" uploaded. Consider this too.` : ""}
-${langInstruction}
-
-Based on the Orphanet database matches above AND patient info, provide enriched diagnosis. Return ONLY this JSON:
-{"summary":"brief summary","reportFindings":"${uploadedFile ? "key findings" : ""}","riskScore":72,"similarStories":["Real patient story 1","Real patient story 2","Real patient story 3"],"possibleConditions":[{"name":"Disease name from matches above","confidence":"High/Medium/Low","confidencePercent":85,"description":"brief description","affectedPeople":"number","avgDiagnosisTime":"time","nextSteps":"tests/specialists","treatmentTimeline":["Week 1-2: Initial tests","Month 1: Specialist","Month 2-3: Treatment","Month 6+: Monitoring"]}],"urgency":"Immediate/Soon/Routine","generalAdvice":"advice","dietTips":[{"icon":"🥗","category":"Diet","advice":"advice"},{"icon":"💧","category":"Hydration","advice":"advice"},{"icon":"🏃","category":"Exercise","advice":"advice"},{"icon":"😴","category":"Sleep","advice":"advice"},{"icon":"🧘","category":"Stress","advice":"advice"}]}`;
-
-  try {
-    const parts = [];
-    if (uploadedFileBase64 && uploadedFileMime) parts.push({ inline_data: { mime_type: uploadedFileMime, data: uploadedFileBase64 } });
-    parts.push({ text: prompt });
-    const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contents: [{ parts }] }) });
-    const data = await response.json();
-    const text = data.candidates[0].content.parts[0].text;
-    const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-    const newEntry = {
-      id: Date.now(), date: new Date().toLocaleDateString(),
-      age: form.age, gender: form.gender, symptoms: form.symptoms,
-      urgency: parsed.urgency, conditions: parsed.possibleConditions.map(c => c.name).join(", "),
-    };
-    const updatedHistory = [newEntry, ...history].slice(0, 10);
-    setHistory(updatedHistory);
-    localStorage.setItem("raredx_history", JSON.stringify(updatedHistory));
-    setResult(parsed);
-    setChatMessages([{ role: "assistant", text: uploadedFile ? t.chatWelcomeReport : t.chatWelcome }]);
-    setStep("result");
-  } catch { alert("Something went wrong. Check your API key."); setStep("form"); }
-};
-    setReminderSet(false);
+ 
+  const analyze = async () => {
+    setStep("loading");
     const key = process.env.REACT_APP_GEMINI_API_KEY;
     const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key;
+ 
+    // Step 1: Match against real Orphanet database
+    const dbMatches = matchDiseases(form.symptoms);
+    const topDiseasesFromDB = dbMatches.map(d => `${d.name} (matched symptoms: ${d.matchedSymptoms.join(", ")})`).join("\n");
+ 
     const bodyPartsText = selectedBodyParts.length > 0 ? `Affected body parts: ${selectedBodyParts.join(", ")}` : "";
     const severityText = SEVERITY_SYMPTOMS.map(s => `${s} severity: ${form["severity_" + s]}/10`).join(", ");
     const langInstruction = selectedLanguage !== "en" ? `Respond with disease names in English but summary, advice and descriptions in ${LANGUAGES.find(l => l.code === selectedLanguage)?.label}.` : "";
-    const prompt = `You are a rare disease diagnostic assistant.
-Age: ${form.age}, Gender: ${form.gender}, Symptoms: ${form.symptoms}
-Severity levels: ${severityText}
-${bodyPartsText}
-Duration: ${form.duration}, Tests done: ${form.testsAlreadyDone}
-${uploadedFile ? `Medical report "${uploadedFile.name}" uploaded. Analyze it carefully.` : ""}
-${langInstruction}
-Return ONLY this JSON with no extra text:
-{"summary":"brief summary","reportFindings":"${uploadedFile ? "key findings from report" : ""}","riskScore":72,"similarStories":["Real patient story 1 with symptoms similar to these","Real patient story 2","Real patient story 3"],"possibleConditions":[{"name":"Disease","confidence":"High/Medium/Low","confidencePercent":85,"description":"brief description","affectedPeople":"worldwide count","avgDiagnosisTime":"avg time to diagnose","nextSteps":"what tests or specialists","treatmentTimeline":["Week 1-2: Initial tests","Month 1: Specialist consultation","Month 2-3: Treatment begins","Month 6+: Monitoring and follow-up"]}],"urgency":"Immediate/Soon/Routine","generalAdvice":"advice","dietTips":[{"icon":"🥗","category":"Diet","advice":"what to eat or avoid"},{"icon":"💧","category":"Hydration","advice":"fluid intake advice"},{"icon":"🏃","category":"Exercise","advice":"activity recommendations"},{"icon":"😴","category":"Sleep","advice":"rest recommendations"},{"icon":"🧘","category":"Stress","advice":"stress management tips"}]}`;
+ 
+    // Step 2: Use Gemini only to explain and enrich — not to guess diseases
+    const reportNote = uploadedFile ? "key findings" : "";
+    const reportText = uploadedFile ? `Medical report "${uploadedFile.name}" uploaded. Consider this too.` : "";
+    const prompt = `You are a rare disease diagnostic assistant. Based on verified Orphanet database matching, these diseases were identified as possible matches:\n\n${topDiseasesFromDB}\n\nPatient info:\nAge: ${form.age}, Gender: ${form.gender}, Symptoms: ${form.symptoms}\nSeverity: ${severityText}\n${bodyPartsText}\nDuration: ${form.duration}, Tests done: ${form.testsAlreadyDone}\n${reportText}\n${langInstruction}\n\nBased on the Orphanet database matches above AND patient info, provide enriched diagnosis. Return ONLY this JSON:\n{"summary":"brief summary","reportFindings":"${reportNote}","riskScore":72,"similarStories":["Real patient story 1","Real patient story 2","Real patient story 3"],"possibleConditions":[{"name":"Disease name from matches above","confidence":"High/Medium/Low","confidencePercent":85,"description":"brief description","affectedPeople":"number","avgDiagnosisTime":"time","nextSteps":"tests/specialists","treatmentTimeline":["Week 1-2: Initial tests","Month 1: Specialist","Month 2-3: Treatment","Month 6+: Monitoring"]}],"urgency":"Immediate/Soon/Routine","generalAdvice":"advice","dietTips":[{"icon":"🥗","category":"Diet","advice":"advice"},{"icon":"💧","category":"Hydration","advice":"advice"},{"icon":"🏃","category":"Exercise","advice":"advice"},{"icon":"😴","category":"Sleep","advice":"advice"},{"icon":"🧘","category":"Stress","advice":"advice"]}}`;
+ 
     try {
       const parts = [];
       if (uploadedFileBase64 && uploadedFileMime) parts.push({ inline_data: { mime_type: uploadedFileMime, data: uploadedFileBase64 } });
@@ -466,7 +419,7 @@ Return ONLY this JSON with no extra text:
       setStep("result");
     } catch { alert("Something went wrong. Check your API key."); setStep("form"); }
   };
-
+ 
   const sendChat = async () => {
     if (!chatInput.trim()) return;
     const userMsg = chatInput; setChatInput("");
@@ -482,18 +435,18 @@ Return ONLY this JSON with no extra text:
     } catch { setChatMessages(prev => [...prev, { role: "assistant", text: "Sorry, something went wrong." }]); }
     setChatLoading(false);
   };
-
+ 
   const reset = () => {
     setStep("form"); setResult(null); setChatMessages([]);
     setUploadedFile(null); setUploadedFileBase64(null); setUploadedFileMime(null);
     setSelectedBodyParts([]); setReminderSet(false);
     setForm({ age: "", gender: "", symptoms: "", duration: "", testsAlreadyDone: "", severity_Pain: 0, severity_Fatigue: 0, severity_Fever: 0, severity_Nausea: 0 });
   };
-
+ 
   const urgencyColor = { Immediate: "#ff4444", Soon: "#ffaa00", Routine: "#00d4aa" };
   const cc = (c) => c === "High" ? "#4d9fff" : c === "Medium" ? "#ffaa00" : "#5a8090";
   const riskColor = (s) => s > 70 ? "#ff4444" : s > 40 ? "#ffaa00" : "#00d4aa";
-
+ 
   return (
     <div className="raredx-wrap">
       <div className="raredx-inner">
@@ -545,7 +498,7 @@ Return ONLY this JSON with no extra text:
             ))}
           </div>
         </div>
-
+ 
         {step === "form" && (
           <div className="card">
             <div className="card-title">{t.formTitle}</div>
@@ -563,7 +516,7 @@ Return ONLY this JSON with no extra text:
                 <input name={f.name} value={form[f.name]} onChange={handleChange} placeholder={f.placeholder} className="field-input" />
               </div>
             ))}
-
+ 
             {/* Severity Sliders */}
             <div className="field">
               <label className="field-label">Symptom Severity (0-10)</label>
@@ -581,7 +534,7 @@ Return ONLY this JSON with no extra text:
                 ))}
               </div>
             </div>
-
+ 
             {/* Symptoms + Voice */}
             <div className="field">
               <div className="symptoms-header">
@@ -590,7 +543,7 @@ Return ONLY this JSON with no extra text:
               </div>
               <textarea name="symptoms" value={form.symptoms} onChange={handleChange} placeholder={t.symptomsPlaceholder} className="field-textarea" />
             </div>
-
+ 
             {/* Body Parts */}
             <div className="field">
               <label className="field-label">{t.bodyParts}</label>
@@ -603,18 +556,18 @@ Return ONLY this JSON with no extra text:
               </div>
               {selectedBodyParts.length > 0 && <div className="selected-text">✓ {t.selected}: {selectedBodyParts.join(", ")}</div>}
             </div>
-
+ 
             {/* File Upload */}
             <div className="field">
               <label className="field-label">{t.uploadReport}</label>
               <input type="file" accept="image/*,.pdf" onChange={handleFileUpload} className="file-input" />
               {uploadedFile && <div className="file-ready">✅ {uploadedFile.name} {t.uploadReady}</div>}
             </div>
-
+ 
             <button onClick={analyze} disabled={!form.age || !form.symptoms} className="analyze-btn">{t.analyzeBtn} →</button>
           </div>
         )}
-
+ 
         {step === "loading" && (
           <div className="loading-wrap">
             <div className="loading-icon">🔬</div>
@@ -627,7 +580,7 @@ Return ONLY this JSON with no extra text:
             </div>
           </div>
         )}
-
+ 
         {step === "result" && result && (
           <div>
             {result.urgency === "Immediate" && (
@@ -638,7 +591,7 @@ Return ONLY this JSON with no extra text:
                 <button className="emergency-btn" onClick={() => window.open("https://www.google.com/maps/search/emergency+hospital+near+me", "_blank")}>{t.emergencyBtn}</button>
               </div>
             )}
-
+ 
             {/* Risk Score Meter */}
             {result.riskScore && (
               <div className="card" style={{ textAlign: "center" }}>
@@ -661,7 +614,7 @@ Return ONLY this JSON with no extra text:
                 <div style={{ color: "#5a7a9a", fontSize: "0.8rem" }}>Based on symptoms, severity and duration</div>
               </div>
             )}
-
+ 
             {/* Case Summary */}
             <div className="card">
               <div className="result-header">
@@ -691,7 +644,7 @@ Return ONLY this JSON with no extra text:
                 <span className="badge" style={{ background: "rgba(77,159,255,0.1)", color: "#4d9fff", border: "1px solid rgba(77,159,255,0.2)" }}>👤 {form.age}yr {form.gender}</span>
               </div>
             </div>
-
+ 
             {/* Similar Patient Stories */}
             {result.similarStories && result.similarStories.length > 0 && (
               <div className="card">
@@ -706,7 +659,7 @@ Return ONLY this JSON with no extra text:
                 </div>
               </div>
             )}
-
+ 
             {/* Possible Conditions */}
             <div className="results-section-title">{t.possibleConditions}</div>
             {result.possibleConditions.map((c, i) => (
@@ -733,7 +686,7 @@ Return ONLY this JSON with no extra text:
                   <div className="next-steps-label">{t.nextSteps}</div>
                   <div className="next-steps-text">{c.nextSteps}</div>
                 </div>
-
+ 
                 {/* Treatment Timeline */}
                 {c.treatmentTimeline && c.treatmentTimeline.length > 0 && (
                   <div style={{ marginTop: "12px" }}>
@@ -753,13 +706,13 @@ Return ONLY this JSON with no extra text:
                 )}
               </div>
             ))}
-
+ 
             {/* General Advice */}
             <div className="card">
               <div className="section-title" style={{ marginBottom: "12px" }}>{t.generalAdvice}</div>
               <p className="advice-text">{result.generalAdvice}</p>
             </div>
-
+ 
             {/* Diet Tips */}
             {result.dietTips && (
               <div className="card">
@@ -777,7 +730,7 @@ Return ONLY this JSON with no extra text:
                 </div>
               </div>
             )}
-
+ 
             {/* Appointment Reminder */}
             <div className="card">
               <div className="section-title" style={{ marginBottom: "8px" }}>📅 Appointment Reminder</div>
@@ -787,7 +740,7 @@ Return ONLY this JSON with no extra text:
                 {reminderSet ? "✅ Reminder Set in Google Calendar!" : "📅 Set Appointment Reminder"}
               </button>
             </div>
-
+ 
             {/* Find Specialist */}
             <div className="card">
               <div className="section-title" style={{ marginBottom: "14px" }}>{t.findSpecialist}</div>
@@ -802,7 +755,7 @@ Return ONLY this JSON with no extra text:
                 </button>
               </div>
             </div>
-
+ 
             {/* Chat */}
             <div className="card">
               <div className="section-title" style={{ marginBottom: "14px" }}>{t.chatTitle}</div>
@@ -819,14 +772,14 @@ Return ONLY this JSON with no extra text:
                 <button onClick={sendChat} className="chat-send">{t.sendBtn}</button>
               </div>
             </div>
-
+ 
             {/* Second Opinion */}
             <div className="card">
               <div className="section-title" style={{ marginBottom: "6px" }}>{t.secondOpinion}</div>
               <p className="second-opinion-desc">{t.secondOpinionDesc}</p>
               <button onClick={analyze} className="second-btn">{t.secondOpinionBtn}</button>
             </div>
-
+ 
             {/* Disclaimer */}
             <div className="card disclaimer-card">
               <div className="disclaimer-title">{t.disclaimer}</div>
@@ -834,7 +787,7 @@ Return ONLY this JSON with no extra text:
               <p className="disclaimer-text">{t.disclaimerText2}</p>
               <p className="disclaimer-footer">{t.disclaimerFooter}</p>
             </div>
-
+ 
             <button onClick={reset} className="reset-btn">{t.newAnalysis}</button>
             <div style={{ textAlign: "center", padding: "16px", marginTop: "8px", borderTop: "1px solid rgba(255,255,255,0.05)", color: "#2a3a4a", fontSize: "0.75rem", lineHeight: "1.8" }}>
   © {new Date().getFullYear()} RareDx. All Rights Reserved.<br/>
