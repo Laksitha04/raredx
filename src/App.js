@@ -5,6 +5,7 @@ const TRANSLATIONS = {
   en: {
     title: "RareDx", subtitle: "AI-powered Rare Disease Diagnosis Assistant",
     stat1: "People with rare diseases", stat2: "Diseases in database", stat3: "Avg diagnosis delay",
+    stat1Num: "300M+", stat2Num: "100+", stat3Num: "4–5 yrs",
     formTitle: "Patient Information", age: "Age", agePlaceholder: "e.g. 28",
     gender: "Gender", genderPlaceholder: "e.g. Female",
     duration: "Duration of Symptoms", durationPlaceholder: "e.g. 6 months",
@@ -57,6 +58,7 @@ const TRANSLATIONS = {
   ta: {
     title: "RareDx", subtitle: "AI-சக்தி வாய்ந்த அரிய நோய் கண்டறியும் உதவியாளர்",
     stat1: "அரிய நோயால் பாதிக்கப்பட்டவர்கள்", stat2: "தரவுத்தளத்தில் நோய்கள்", stat3: "சராசரி கண்டறிதல் தாமதம்",
+    stat1Num: "30 கோடி+", stat2Num: "100+", stat3Num: "4–5 ஆண்டுகள்",
     formTitle: "நோயாளி தகவல்", age: "வயது", agePlaceholder: "எ.கா. 28",
     gender: "பாலினம்", genderPlaceholder: "எ.கா. பெண்",
     duration: "அறிகுறிகளின் காலம்", durationPlaceholder: "எ.கா. 6 மாதங்கள்",
@@ -107,6 +109,7 @@ const TRANSLATIONS = {
   hi: {
     title: "RareDx", subtitle: "AI-संचालित दुर्लभ रोग निदान सहायक",
     stat1: "दुर्लभ बीमारियों से प्रभावित", stat2: "डेटाबेस में बीमारियाँ", stat3: "औसत निदान देरी",
+    stat1Num: "30 करोड़+", stat2Num: "100+", stat3Num: "4–5 वर्ष",
     formTitle: "रोगी जानकारी", age: "आयु", agePlaceholder: "जैसे 28",
     gender: "लिंग", genderPlaceholder: "जैसे महिला",
     duration: "लक्षणों की अवधि", durationPlaceholder: "जैसे 6 महीने",
@@ -157,6 +160,7 @@ const TRANSLATIONS = {
   te: {
     title: "RareDx", subtitle: "AI-ఆధారిత అరుదైన వ్యాధి నిర్ధారణ సహాయకుడు",
     stat1: "అరుదైన వ్యాధులతో బాధపడుతున్నవారు", stat2: "డేటాబేస్‌లో వ్యాధులు", stat3: "సగటు నిర్ధారణ జాప్యం",
+    stat1Num: "30 కోట్లు+", stat2Num: "100+", stat3Num: "4–5 సంవత్సరాలు",
     formTitle: "రోగి సమాచారం", age: "వయసు", agePlaceholder: "ఉదా. 28",
     gender: "లింగం", genderPlaceholder: "ఉదా. మహిళ",
     duration: "లక్షణాల వ్యవధి", durationPlaceholder: "ఉదా. 6 నెలలు",
@@ -207,6 +211,7 @@ const TRANSLATIONS = {
   ml: {
     title: "RareDx", subtitle: "AI-ശക്തിയുള്ള അപൂർവ രോഗ നിർണ്ണയ സഹായി",
     stat1: "അപൂർവ രോഗങ്ങൾ ബാധിച്ചവർ", stat2: "ഡാറ്റാബേസിലെ രോഗങ്ങൾ", stat3: "ശരാശരി നിർണ്ണയ കാലതാമസം",
+    stat1Num: "30 കോടി+", stat2Num: "100+", stat3Num: "4–5 വർഷം",
     formTitle: "രോഗി വിവരങ്ങൾ", age: "പ്രായം", agePlaceholder: "ഉദാ. 28",
     gender: "ലിംഗം", genderPlaceholder: "ഉദാ. സ്ത്രീ",
     duration: "ലക്ഷണങ്ങളുടെ ദൈർഘ്യം", durationPlaceholder: "ഉദാ. 6 മാസം",
@@ -536,7 +541,7 @@ export default function App() {
           </div>
           <p>{t.subtitle}</p>
           <div className="stats">
-            {[["300M+", t.stat1], ["100+", t.stat2], ["4–5 yrs", t.stat3]].map(([n, l]) => (
+            {[[t.stat1Num, t.stat1], [t.stat2Num, t.stat2], [t.stat3Num, t.stat3]].map(([n, l]) => (
               <div key={n} className="stat-card"><div className="stat-num">{n}</div><div className="stat-label">{l}</div></div>
             ))}
           </div>
