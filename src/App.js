@@ -1,6 +1,6 @@
 import { matchDiseases } from './diseaseDatabase';
 import { useState, useRef, useEffect } from "react";
- 
+
 const TRANSLATIONS = {
   en: {
     title: "RareDx", subtitle: "AI-powered Rare Disease Diagnosis Assistant",
@@ -13,6 +13,7 @@ const TRANSLATIONS = {
     voiceBtn: "🎤 Voice", listeningBtn: "🔴 Listening...",
     bodyParts: "Affected Body Parts", selected: "Selected",
     uploadReport: "Upload Medical Report (optional)", uploadReady: "ready",
+    chooseFile: "📎 Choose File", noFileChosen: "No file chosen",
     analyzeBtn: "Analyze Symptoms", analyzingTitle: "Analyzing symptoms...",
     analyzingSubtitle: "Cross-referencing 100+ verified rare diseases",
     step1: "Analyzing symptom patterns...", step2: "Checking rare disease database...", step3: "Generating diagnosis report...",
@@ -33,6 +34,25 @@ const TRANSLATIONS = {
     emergencyDesc: "Please seek emergency care immediately.",
     emergencyBtn: "Find Nearest Hospital", chatWelcome: "I've analyzed the symptoms. Ask me anything!",
     chatWelcomeReport: "I've analyzed the symptoms and your report. Ask me anything!", match: "Match",
+    severityTitle: "Symptom Severity (0-10)",
+    pain: "Pain", fatigue: "Fatigue", fever: "Fever", nausea: "Nausea",
+    pastDiagnoses: "Past Diagnoses", hideHistory: "Hide History", showHistory: "History",
+    clearHistory: "🗑️ Clear History", noPastDiagnoses: "No past diagnoses yet.",
+    dietTitle: "🥗 Diet & Lifestyle Tips",
+    appointmentTitle: "📅 Appointment Reminder",
+    appointmentDesc: "Set a Google Calendar reminder to follow up with your doctor in 7 days.",
+    appointmentBtn: "📅 Set Appointment Reminder",
+    reminderSetText: "✅ Reminder Set in Google Calendar!",
+    riskTitle: "⚠️ Overall Risk Score",
+    riskHigh: "🔴 High Risk", riskMedium: "🟡 Moderate Risk", riskLow: "🟢 Low Risk",
+    riskSubtitle: "Based on symptoms, severity and duration",
+    treatmentTimeline: "🗓️ Treatment Timeline",
+    similarStories: "👥 Similar Patient Stories",
+    thinking: "Thinking...",
+    copyBtn: "Copy", waBtn: "WA",
+    thinking: "Thinking...",
+    bodyPartLabels: ["Head","Neck","Chest","Abdomen","Back","Left Arm","Right Arm","Left Leg","Right Leg","Joints"],
+    bodyPartLabels: ["Head","Neck","Chest","Abdomen","Back","Left Arm","Right Arm","Left Leg","Right Leg","Joints"],
   },
   ta: {
     title: "RareDx", subtitle: "AI-சக்தி வாய்ந்த அரிய நோய் கண்டறியும் உதவியாளர்",
@@ -45,6 +65,7 @@ const TRANSLATIONS = {
     voiceBtn: "🎤 குரல்", listeningBtn: "🔴 கேட்கிறது...",
     bodyParts: "பாதிக்கப்பட்ட உடல் பாகங்கள்", selected: "தேர்ந்தெடுக்கப்பட்டது",
     uploadReport: "மருத்துவ அறிக்கை பதிவேற்றவும்", uploadReady: "தயார்",
+    chooseFile: "📎 கோப்பை தேர்ந்தெடு", noFileChosen: "கோப்பு தேர்வு செய்யப்படவில்லை",
     analyzeBtn: "பகுப்பாய்வு செய்க", analyzingTitle: "பகுப்பாய்வு செய்கிறோம்...",
     analyzingSubtitle: "100+ அரிய நோய்களை சரிபார்க்கிறோம்",
     step1: "அறிகுறி வடிவங்களை பகுப்பாய்வு...", step2: "நோய் தரவுத்தளம் சரிபார்க்கிறோம்...", step3: "அறிக்கை உருவாக்குகிறோம்...",
@@ -65,6 +86,23 @@ const TRANSLATIONS = {
     emergencyDesc: "உடனடியாக அவசர சிகிச்சை பெறுங்கள்.",
     emergencyBtn: "அருகிலுள்ள மருத்துவமனை", chatWelcome: "அறிகுறிகளை பகுப்பாய்வு செய்தேன். கேளுங்கள்!",
     chatWelcomeReport: "அறிகுறிகள் மற்றும் அறிக்கையை பகுப்பாய்வு செய்தேன்!", match: "பொருத்தம்",
+    severityTitle: "அறிகுறி தீவிரம் (0-10)",
+    pain: "வலி", fatigue: "சோர்வு", fever: "காய்ச்சல்", nausea: "குமட்டல்",
+    pastDiagnoses: "கடந்த கால நோய் கண்டறிதல்", hideHistory: "வரலாற்றை மறை", showHistory: "வரலாறு",
+    clearHistory: "🗑️ வரலாற்றை அழி", noPastDiagnoses: "இன்னும் கண்டறிதல் வரலாறு இல்லை.",
+    dietTitle: "🥗 உணவு & வாழ்க்கை முறை குறிப்புகள்",
+    appointmentTitle: "📅 சந்திப்பு நினைவூட்டல்",
+    appointmentDesc: "7 நாட்களில் மருத்துவரை பின்தொடர Google Calendar நினைவூட்டல் அமைக்கவும்.",
+    appointmentBtn: "📅 சந்திப்பு நினைவூட்டல் அமை",
+    reminderSetText: "✅ Google Calendar-ல் நினைவூட்டல் அமைக்கப்பட்டது!",
+    riskTitle: "⚠️ ஒட்டுமொத்த ஆபத்து மதிப்பீடு",
+    riskHigh: "🔴 அதிக ஆபத்து", riskMedium: "🟡 மிதமான ஆபத்து", riskLow: "🟢 குறைந்த ஆபத்து",
+    riskSubtitle: "அறிகுறிகள், தீவிரம் மற்றும் காலம் அடிப்படையில்",
+    treatmentTimeline: "🗓️ சிகிச்சை காலவரிசை",
+    similarStories: "👥 ஒத்த நோயாளர் கதைகள்",
+    thinking: "யோசிக்கிறேன்...",
+    copyBtn: "நகலெடு", waBtn: "வாட்ஸ்அப்",
+    bodyPartLabels: ["தலை","கழுத்து","மார்பு","வயிறு","முதுகு","இடது கை","வலது கை","இடது கால்","வலது கால்","மூட்டுகள்"],
   },
   hi: {
     title: "RareDx", subtitle: "AI-संचालित दुर्लभ रोग निदान सहायक",
@@ -73,13 +111,14 @@ const TRANSLATIONS = {
     gender: "लिंग", genderPlaceholder: "जैसे महिला",
     duration: "लक्षणों की अवधि", durationPlaceholder: "जैसे 6 महीने",
     tests: "पहले किए गए परीक्षण", testsPlaceholder: "जैसे रक्त परीक्षण सामान्य",
-    symptoms: "लक्षणालु", symptomsPlaceholder: "लक्षण बताएं...",
+    symptoms: "लक्षण", symptomsPlaceholder: "लक्षण बताएं...",
     voiceBtn: "🎤 आवाज़", listeningBtn: "🔴 सुन रहा है...",
     bodyParts: "प्रभावित शरीर के अंग", selected: "चयनित",
     uploadReport: "चिकित्सा रिपोर्ट अपलोड करें", uploadReady: "तैयार",
+    chooseFile: "📎 फ़ाइल चुनें", noFileChosen: "कोई फ़ाइल नहीं चुनी",
     analyzeBtn: "विश्लेषण करें", analyzingTitle: "विश्लेषण हो रहा है...",
     analyzingSubtitle: "100+ दुर्लभ बीमारियों की जाँच",
-    step1: "लक्षण पैटर्न का विश्लेषण...", step2: "वीर डेटाबेस की जाँच...", step3: "निदान रिपोर्ट तैयार...",
+    step1: "लक्षण पैटर्न का विश्लेषण...", step2: "रोग डेटाबेस की जाँच...", step3: "निदान रिपोर्ट तैयार...",
     caseSummary: "केस सारांश", printReport: "प्रिंट", reportFindings: "रिपोर्ट निष्कर्ष",
     urgency: "तात्कालिकता", possibleConditions: "संभावित स्थितियाँ", confidence: "विश्वास",
     affected: "प्रभावित", avgDiagnosis: "औसत निदान", nextSteps: "अगले कदम",
@@ -89,14 +128,31 @@ const TRANSLATIONS = {
     sendBtn: "भेजें", secondOpinion: "दूसरी राय लें",
     secondOpinionDesc: "नए दृष्टिकोण के लिए पुनः विश्लेषण करें।",
     secondOpinionBtn: "दूसरी राय विश्लेषण", disclaimer: "चिकित्सा अस्वीकरण",
-    disclaimerText1: "RareDx एक AI सूचनात्मक उपकरण है। इदिका",
-    disclaimerBold: "पेशेवर चिकित्सा सलाह का विकल्श नहीं है।",
+    disclaimerText1: "RareDx एक AI सूचनात्मक उपकरण है। यह",
+    disclaimerBold: "पेशेवर चिकित्सा सलाह का विकल्प नहीं है।",
     disclaimerText2: "हमेशा अपने चिकित्सक की सलाह लें।",
     disclaimerFooter: "© 2025 RareDx • केवल शैक्षिक उद्देश्यों के लिए",
     newAnalysis: "← नया विश्लेषण", emergencyTitle: "तत्काल चिकित्सा ध्यान आवश्यक!",
     emergencyDesc: "कृपया तुरंत आपातकालीन देखभाल लें।",
     emergencyBtn: "निकटतम अस्पताल", chatWelcome: "लक्षणों का विश्लेषण किया। पूछें!",
     chatWelcomeReport: "लक्षण और रिपोर्ट का विश्लेषण किया!", match: "मिलान",
+    severityTitle: "लक्षण गंभीरता (0-10)",
+    pain: "दर्द", fatigue: "थकान", fever: "बुखार", nausea: "मतली",
+    pastDiagnoses: "पिछले निदान", hideHistory: "इतिहास छुपाएं", showHistory: "इतिहास",
+    clearHistory: "🗑️ इतिहास साफ करें", noPastDiagnoses: "अभी तक कोई निदान नहीं।",
+    dietTitle: "🥗 आहार और जीवनशैली सुझाव",
+    appointmentTitle: "📅 अपॉइंटमेंट रिमाइंडर",
+    appointmentDesc: "7 दिनों में डॉक्टर से फॉलो अप के लिए Google Calendar रिमाइंडर सेट करें।",
+    appointmentBtn: "📅 अपॉइंटमेंट रिमाइंडर सेट करें",
+    reminderSetText: "✅ Google Calendar में रिमाइंडर सेट!",
+    riskTitle: "⚠️ समग्र जोखिम स्कोर",
+    riskHigh: "🔴 उच्च जोखिम", riskMedium: "🟡 मध्यम जोखिम", riskLow: "🟢 कम जोखिम",
+    riskSubtitle: "लक्षण, गंभीरता और अवधि के आधार पर",
+    treatmentTimeline: "🗓️ उपचार समयरेखा",
+    similarStories: "👥 समान रोगी कहानियाँ",
+    thinking: "सोच रहा हूं...",
+    copyBtn: "कॉपी", waBtn: "व्हाट्सएप",
+    bodyPartLabels: ["सिर","गर्दन","छाती","पेट","पीठ","बायाँ हाथ","दायाँ हाथ","बायाँ पैर","दायाँ पैर","जोड़"],
   },
   te: {
     title: "RareDx", subtitle: "AI-ఆధారిత అరుదైన వ్యాధి నిర్ధారణ సహాయకుడు",
@@ -107,14 +163,15 @@ const TRANSLATIONS = {
     tests: "ఇప్పటికే చేసిన పరీక్షలు", testsPlaceholder: "ఉదా. రక్త పరీక్ష సాధారణం",
     symptoms: "లక్షణాలు", symptomsPlaceholder: "లక్షణాలు వివరించండి...",
     voiceBtn: "🎤 వాయిస్", listeningBtn: "🔴 వింటోంది...",
-    bodyParts: "ప్రभावित శరీర భాగాలు", selected: "ఎంచుకున్నవి",
+    bodyParts: "ప్రభావిత శరీర భాగాలు", selected: "ఎంచుకున్నవి",
     uploadReport: "వైద్య నివేదిక అప్‌లోడ్", uploadReady: "సిద్ధంగా ఉంది",
+    chooseFile: "📎 ఫైల్ ఎంచుకోండి", noFileChosen: "ఫైల్ ఎంచుకోలేదు",
     analyzeBtn: "విశ్లేషించండి", analyzingTitle: "విశ్లేషిస్తోంది...",
     analyzingSubtitle: "100+ అరుదైన వ్యాధులను తనిఖీ చేస్తోంది",
     step1: "లక్షణ నమూనాలు విశ్లేషిస్తోంది...", step2: "వ్యాధి డేటాబేస్ తనిఖీ...", step3: "నివేదిక రూపొందిస్తోంది...",
     caseSummary: "కేసు సారాంశం", printReport: "ముద్రించు", reportFindings: "నివేదిక ఫలితాలు",
-    urgency: "అత్యవసరత", possibleConditions: "సాధ్యమానే పరిస్థితులు", confidence: "విశ్వాసం",
-    affected: "ప్రभावितులు", avgDiagnosis: "సగటు నిర్ధారణ", nextSteps: "அடுத்த ఘட్టాలు",
+    urgency: "అత్యవసరత", possibleConditions: "సాధ్యమయ్యే పరిస్థితులు", confidence: "విశ్వాసం",
+    affected: "ప్రభావితులు", avgDiagnosis: "సగటు నిర్ధారణ", nextSteps: "తదుపరి దశలు",
     generalAdvice: "సాధారణ సలహా", findSpecialist: "నిపుణుడిని కనుగొనండి",
     findBtn: "నిపుణుడు", findClinic: "అరుదైన వ్యాధి క్లినిక్",
     chatTitle: "నిర్ధారణ గురించి అడగండి", chatPlaceholder: "ఏదైనా అడగండి...",
@@ -124,11 +181,28 @@ const TRANSLATIONS = {
     disclaimerText1: "RareDx ఒక AI సమాచార సాధనం. ఇది",
     disclaimerBold: "వృత్తిపరమైన వైద్య సలహాకు ప్రత్యామ్నాయం కాదు.",
     disclaimerText2: "ఎల్లప్పుడూ మీ వైద్యుని సలహా తీసుకోండి.",
-    disclaimerFooter: "© 2025 RareDx • విద్యా ప్రయోజనాల కోసం మాత్రం",
+    disclaimerFooter: "© 2025 RareDx • విద్యా ప్రయోజనాల కోసం మాత్రమే",
     newAnalysis: "← కొత్త విశ్లేషణ", emergencyTitle: "తక్షణ వైద్య సహాయం అవసరం!",
     emergencyDesc: "దయచేసి వెంటనే అత్యవసర సంరక్షణ తీసుకోండి.",
     emergencyBtn: "సమీప ఆసుపత్రి", chatWelcome: "లక్షణాలను విశ్లేషించాను. అడగండి!",
     chatWelcomeReport: "లక్షణాలు మరియు నివేదికను విశ్లేషించాను!", match: "సరిపోలిక",
+    severityTitle: "లక్షణ తీవ్రత (0-10)",
+    pain: "నొప్పి", fatigue: "అలసట", fever: "జ్వరం", nausea: "వికారం",
+    pastDiagnoses: "గత నిర్ధారణలు", hideHistory: "చరిత్ర దాచు", showHistory: "చరిత్ర",
+    clearHistory: "🗑️ చరిత్ర తొలగించు", noPastDiagnoses: "ఇంకా నిర్ధారణ చరిత్ర లేదు.",
+    dietTitle: "🥗 ఆహారం & జీవనశైలి చిట్కాలు",
+    appointmentTitle: "📅 అపాయింట్‌మెంట్ రిమైండర్",
+    appointmentDesc: "7 రోజులలో డాక్టర్‌ను సంప్రదించడానికి Google Calendar రిమైండర్ సెట్ చేయండి.",
+    appointmentBtn: "📅 అపాయింట్‌మెంట్ రిమైండర్ సెట్ చేయి",
+    reminderSetText: "✅ Google Calendar లో రిమైండర్ సెట్ అయింది!",
+    riskTitle: "⚠️ మొత్తం ప్రమాద స్కోర్",
+    riskHigh: "🔴 అధిక ప్రమాదం", riskMedium: "🟡 మధ్యస్థ ప్రమాదం", riskLow: "🟢 తక్కువ ప్రమాదం",
+    riskSubtitle: "లక్షణాలు, తీవ్రత మరియు వ్యవధి ఆధారంగా",
+    treatmentTimeline: "🗓️ చికిత్స కాలక్రమం",
+    similarStories: "👥 ఇలాంటి రోగుల కథలు",
+    thinking: "ఆలోచిస్తున్నాను...",
+    copyBtn: "కాపీ", waBtn: "వాట్సాప్",
+    bodyPartLabels: ["తల","మెడ","ఛాతీ","పొట్ట","వీపు","ఎడమ చేయి","కుడి చేయి","ఎడమ కాలు","కుడి కాలు","కీళ్ళు"],
   },
   ml: {
     title: "RareDx", subtitle: "AI-ശക്തിയുള്ള അപൂർവ രോഗ നിർണ്ണയ സഹായി",
@@ -141,6 +215,7 @@ const TRANSLATIONS = {
     voiceBtn: "🎤 ശബ്ദം", listeningBtn: "🔴 കേൾക്കുന്നു...",
     bodyParts: "ബാധിച്ച ശരീരഭാഗങ്ങൾ", selected: "തിരഞ്ഞെടുത്തത്",
     uploadReport: "മെഡിക്കൽ റിപ്പോർട്ട് അപ്‌ലോഡ്", uploadReady: "തയ്യാർ",
+    chooseFile: "📎 ഫയൽ തിരഞ്ഞെടുക്കുക", noFileChosen: "ഫയൽ തിരഞ്ഞെടുത്തിട്ടില്ല",
     analyzeBtn: "വിശകലനം ചെയ്യുക", analyzingTitle: "വിശകലനം ചെയ്യുന്നു...",
     analyzingSubtitle: "100+ അപൂർവ രോഗങ്ങൾ പരിശോധിക്കുന്നു",
     step1: "ലക്ഷണ പാറ്റേണുകൾ...", step2: "ഡാറ്റാബേസ് തനിഖ...", step3: "റിപ്പോർട്ട് തയ്യാറാക്കുന്നു...",
@@ -161,25 +236,35 @@ const TRANSLATIONS = {
     emergencyDesc: "ഉടനടി അടിയന്തര പരിചരണം തേടുക.",
     emergencyBtn: "ഏറ്റവും അടുത്ത ആശുപത്രി", chatWelcome: "ലക്ഷണങ്ങൾ വിശകലനം ചെയ്തു. ചോദിക്കൂ!",
     chatWelcomeReport: "ലക്ഷണങ്ങളും റിപ്പോർട്ടും വിശകലനം ചെയ്തു!", match: "പൊരുത്തം",
+    severityTitle: "ലക്ഷണ തീവ്രത (0-10)",
+    pain: "വേദന", fatigue: "ക്ഷീണം", fever: "പനി", nausea: "ഓക്കാനം",
+    pastDiagnoses: "മുൻ നിർണ്ണയങ്ങൾ", hideHistory: "ചരിത്രം മറയ്ക്കുക", showHistory: "ചരിത്രം",
+    clearHistory: "🗑️ ചരിത്രം മായ്ക്കുക", noPastDiagnoses: "ഇതുവരെ നിർണ്ണയ ചരിത്രം ഇല്ല.",
+    dietTitle: "🥗 ഭക്ഷണ & ജീവിതശൈലി നുറുങ്ങുകൾ",
+    appointmentTitle: "📅 അപ്പോയിന്റ്മെന്റ് റിമൈൻഡർ",
+    appointmentDesc: "7 ദിവസത്തിനുള്ളിൽ ഡോക്ടറെ ഫോളോ അപ്പ് ചെയ്യാൻ Google Calendar റിമൈൻഡർ സജ്ജമാക്കുക.",
+    appointmentBtn: "📅 അപ്പോയിന്റ്മെന്റ് റിമൈൻഡർ സജ്ജമാക്കുക",
+    reminderSetText: "✅ Google Calendar-ൽ റിമൈൻഡർ സജ്ജമായി!",
+    riskTitle: "⚠️ മൊത്തം അപകട സ്കോർ",
+    riskHigh: "🔴 ഉയർന്ന അപകടം", riskMedium: "🟡 മിതമായ അപകടം", riskLow: "🟢 കുറഞ്ഞ അപകടം",
+    riskSubtitle: "ലക്ഷണങ്ങൾ, തീവ്രത, ദൈർഘ്യം എന്നിവ അടിസ്ഥാനമാക്കി",
+    treatmentTimeline: "🗓️ ചികിത്സ കാലഘട്ടം",
+    similarStories: "👥 സമാന രോഗികളുടെ കഥകൾ",
+    thinking: "ചിന്തിക്കുന്നു...",
+    copyBtn: "പകർത്തുക", waBtn: "വാട്സ്ആപ്പ്",
+    bodyPartLabels: ["തല","കഴുത്ത്","നെഞ്ച്","വയർ","പുറം","ഇടത് കൈ","വലത് കൈ","ഇടത് കാൽ","വലത് കാൽ","സന്ധികൾ"],
   },
 };
- 
-const BODY_PARTS = [
-  { id: "head", label: "Head", icon: "🧠" }, { id: "neck", label: "Neck", icon: "🔗" },
-  { id: "chest", label: "Chest", icon: "❤️" }, { id: "abdomen", label: "Abdomen", icon: "🫁" },
-  { id: "back", label: "Back", icon: "🦴" }, { id: "leftArm", label: "Left Arm", icon: "💪" },
-  { id: "rightArm", label: "Right Arm", icon: "💪" }, { id: "leftLeg", label: "Left Leg", icon: "🦵" },
-  { id: "rightLeg", label: "Right Leg", icon: "🦵" }, { id: "joints", label: "Joints", icon: "⚙️" },
-];
- 
+
+const BODY_PART_ICONS = ["🧠","🔗","❤️","🫁","🦴","💪","💪","🦵","🦵","⚙️"];
+const BODY_PART_KEYS = ["Head","Neck","Chest","Abdomen","Back","Left Arm","Right Arm","Left Leg","Right Leg","Joints"];
+
 const LANGUAGES = [
   { code: "en", label: "EN" }, { code: "ta", label: "தமிழ்" },
   { code: "hi", label: "हिंदी" }, { code: "te", label: "తెలుగు" },
   { code: "ml", label: "മലയാളം" },
 ];
- 
-const SEVERITY_SYMPTOMS = ["Pain", "Fatigue", "Fever", "Nausea"];
- 
+
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -187,11 +272,7 @@ const css = `
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 2px; }
-  .raredx-wrap {
-    min-height: 100vh; background: #020818;
-    background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,100,255,0.15), transparent), radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,200,150,0.08), transparent);
-    font-family: 'Space Grotesk', sans-serif; color: #e2eaff; padding: 24px 16px 60px;
-  }
+  .raredx-wrap { min-height: 100vh; background: #020818; background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,100,255,0.15), transparent), radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,200,150,0.08), transparent); font-family: 'Space Grotesk', sans-serif; color: #e2eaff; padding: 24px 16px 60px; }
   .raredx-inner { max-width: 720px; margin: 0 auto; }
   .header { text-align: center; margin-bottom: 40px; }
   .header-logo { display: inline-flex; align-items: center; gap: 12px; margin-bottom: 12px; }
@@ -225,9 +306,6 @@ const css = `
   .body-part-btn:hover { border-color: rgba(0,150,255,0.3); color: #8aabcf; }
   .body-part-btn.selected { background: rgba(0,100,255,0.15); border-color: rgba(0,150,255,0.5); color: #4d9fff; font-weight: 500; }
   .selected-text { color: #4d9fff; font-size: 0.8rem; margin-top: 10px; }
-  .file-input { width: 100%; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); border-radius: 10px; padding: 11px 14px; color: #5a7a9a; font-size: 0.88rem; cursor: pointer; transition: border-color 0.2s; }
-  .file-input:hover { border-color: rgba(0,150,255,0.3); }
-  .file-ready { color: #00d4aa; font-size: 0.82rem; margin-top: 6px; }
   .analyze-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #0055dd, #0099bb); border: none; border-radius: 12px; color: #fff; font-size: 1rem; font-weight: 600; font-family: 'Outfit', sans-serif; letter-spacing: 0.5px; cursor: pointer; margin-top: 8px; box-shadow: 0 8px 30px rgba(0,100,255,0.3); transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s; }
   .analyze-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,100,255,0.4); }
   .analyze-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -310,7 +388,7 @@ const css = `
   .second-opinion-desc { color: #5a7a9a; font-size: 0.84rem; margin-bottom: 14px; line-height: 1.6; }
   input[type=range] { accent-color: #4d9fff; }
 `;
- 
+
 export default function App() {
   const [step, setStep] = useState("form");
   const [result, setResult] = useState(null);
@@ -333,17 +411,17 @@ export default function App() {
     severity_Pain: 0, severity_Fatigue: 0, severity_Fever: 0, severity_Nausea: 0,
   });
   const recognitionRef = useRef(null);
- 
+
   useEffect(() => {
     const style = document.createElement("style");
     style.textContent = css;
     document.head.appendChild(style);
     return () => document.head.removeChild(style);
   }, []);
- 
+
   const t = TRANSLATIONS[selectedLanguage];
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
- 
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -352,11 +430,11 @@ export default function App() {
     reader.onload = () => { setUploadedFileBase64(reader.result.split(",")[1]); setUploadedFileMime(file.type); };
     reader.readAsDataURL(file);
   };
- 
-  const toggleBodyPart = (part) => {
-    setSelectedBodyParts(prev => prev.includes(part.label) ? prev.filter(p => p !== part.label) : [...prev, part.label]);
+
+  const toggleBodyPart = (key) => {
+    setSelectedBodyParts(prev => prev.includes(key) ? prev.filter(p => p !== key) : [...prev, key]);
   };
- 
+
   const startVoice = () => {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) { alert("Voice input not supported. Try Chrome!"); return; }
@@ -368,7 +446,7 @@ export default function App() {
     r.onerror = () => setIsListening(false);
     recognitionRef.current = r; r.start();
   };
- 
+
   const setAppointmentReminder = () => {
     const date = new Date();
     date.setDate(date.getDate() + 7);
@@ -379,25 +457,30 @@ export default function App() {
     window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&dates=${dateStr}/${endStr}`, "_blank");
     setReminderSet(true);
   };
- 
+
+  const severitySymptoms = [
+    { key: "Pain", label: t.pain },
+    { key: "Fatigue", label: t.fatigue },
+    { key: "Fever", label: t.fever },
+    { key: "Nausea", label: t.nausea },
+  ];
+
   const analyze = async () => {
     setStep("loading");
+    setReminderSet(false);
     const key = process.env.REACT_APP_GEMINI_API_KEY;
     const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + key;
- 
-    // Step 1: Match against real Orphanet database
     const dbMatches = matchDiseases(form.symptoms);
     const topDiseasesFromDB = dbMatches.map(d => `${d.name} (matched symptoms: ${d.matchedSymptoms.join(", ")})`).join("\n");
- 
     const bodyPartsText = selectedBodyParts.length > 0 ? `Affected body parts: ${selectedBodyParts.join(", ")}` : "";
-    const severityText = SEVERITY_SYMPTOMS.map(s => `${s} severity: ${form["severity_" + s]}/10`).join(", ");
-    const langInstruction = selectedLanguage !== "en" ? `Respond with disease names in English but summary, advice and descriptions in ${LANGUAGES.find(l => l.code === selectedLanguage)?.label}.` : "";
- 
-    // Step 2: Use Gemini only to explain and enrich — not to guess diseases
+    const severityText = severitySymptoms.map(s => `${s.key} severity: ${form["severity_" + s.key]}/10`).join(", ");
+    const langName = LANGUAGES.find(l => l.code === selectedLanguage)?.label || "English";
+    const langInstruction = selectedLanguage !== "en"
+      ? `Respond ENTIRELY in ${langName} language. Keep disease names in English only. Translate ALL other text including summary, descriptions, advice, diet category names, and all labels to ${langName}.`
+      : "";
     const reportNote = uploadedFile ? "key findings" : "";
     const reportText = uploadedFile ? `Medical report "${uploadedFile.name}" uploaded. Consider this too.` : "";
-    const prompt = `You are a rare disease diagnostic assistant. Based on verified Orphanet database matching, these diseases were identified as possible matches:\n\n${topDiseasesFromDB}\n\nPatient info:\nAge: ${form.age}, Gender: ${form.gender}, Symptoms: ${form.symptoms}\nSeverity: ${severityText}\n${bodyPartsText}\nDuration: ${form.duration}, Tests done: ${form.testsAlreadyDone}\n${reportText}\n${langInstruction}\n\nBased on the Orphanet database matches above AND patient info, provide enriched diagnosis. Return ONLY this JSON:\n{"summary":"brief summary","reportFindings":"${reportNote}","riskScore":72,"similarStories":["Real patient story 1","Real patient story 2","Real patient story 3"],"possibleConditions":[{"name":"Disease name from matches above","confidence":"High/Medium/Low","confidencePercent":85,"description":"brief description","affectedPeople":"number","avgDiagnosisTime":"time","nextSteps":"tests/specialists","treatmentTimeline":["Week 1-2: Initial tests","Month 1: Specialist","Month 2-3: Treatment","Month 6+: Monitoring"]}],"urgency":"Immediate/Soon/Routine","generalAdvice":"advice","dietTips":[{"icon":"🥗","category":"Diet","advice":"advice"},{"icon":"💧","category":"Hydration","advice":"advice"},{"icon":"🏃","category":"Exercise","advice":"advice"},{"icon":"😴","category":"Sleep","advice":"advice"},{"icon":"🧘","category":"Stress","advice":"advice"]}}`;
- 
+    const prompt = `You are a rare disease diagnostic assistant. Based on verified Orphanet database matching, these diseases were identified as possible matches:\n\n${topDiseasesFromDB}\n\nPatient info:\nAge: ${form.age}, Gender: ${form.gender}, Symptoms: ${form.symptoms}\nSeverity: ${severityText}\n${bodyPartsText}\nDuration: ${form.duration}, Tests done: ${form.testsAlreadyDone}\n${reportText}\n${langInstruction}\n\nProvide enriched diagnosis. Return ONLY this JSON:\n{"summary":"brief summary","reportFindings":"${reportNote}","riskScore":72,"similarStories":["story1","story2","story3"],"possibleConditions":[{"name":"Disease","confidence":"High/Medium/Low","confidencePercent":85,"description":"brief","affectedPeople":"number","avgDiagnosisTime":"time","nextSteps":"tests","treatmentTimeline":["Week 1-2: tests","Month 1: specialist","Month 2-3: treatment","Month 6+: monitoring"]}],"urgency":"Immediate/Soon/Routine","generalAdvice":"advice","dietTips":[{"icon":"🥗","category":"Diet","advice":"advice"},{"icon":"💧","category":"Hydration","advice":"advice"},{"icon":"🏃","category":"Exercise","advice":"advice"},{"icon":"😴","category":"Sleep","advice":"advice"},{"icon":"🧘","category":"Stress","advice":"advice"}]}`;
     try {
       const parts = [];
       if (uploadedFileBase64 && uploadedFileMime) parts.push({ inline_data: { mime_type: uploadedFileMime, data: uploadedFileBase64 } });
@@ -406,11 +489,7 @@ export default function App() {
       const data = await response.json();
       const text = data.candidates[0].content.parts[0].text;
       const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-      const newEntry = {
-        id: Date.now(), date: new Date().toLocaleDateString(),
-        age: form.age, gender: form.gender, symptoms: form.symptoms,
-        urgency: parsed.urgency, conditions: parsed.possibleConditions.map(c => c.name).join(", "),
-      };
+      const newEntry = { id: Date.now(), date: new Date().toLocaleDateString(), age: form.age, gender: form.gender, symptoms: form.symptoms, urgency: parsed.urgency, conditions: parsed.possibleConditions.map(c => c.name).join(", ") };
       const updatedHistory = [newEntry, ...history].slice(0, 10);
       setHistory(updatedHistory);
       localStorage.setItem("raredx_history", JSON.stringify(updatedHistory));
@@ -419,7 +498,7 @@ export default function App() {
       setStep("result");
     } catch { alert("Something went wrong. Check your API key."); setStep("form"); }
   };
- 
+
   const sendChat = async () => {
     if (!chatInput.trim()) return;
     const userMsg = chatInput; setChatInput("");
@@ -435,18 +514,18 @@ export default function App() {
     } catch { setChatMessages(prev => [...prev, { role: "assistant", text: "Sorry, something went wrong." }]); }
     setChatLoading(false);
   };
- 
+
   const reset = () => {
     setStep("form"); setResult(null); setChatMessages([]);
     setUploadedFile(null); setUploadedFileBase64(null); setUploadedFileMime(null);
     setSelectedBodyParts([]); setReminderSet(false);
     setForm({ age: "", gender: "", symptoms: "", duration: "", testsAlreadyDone: "", severity_Pain: 0, severity_Fatigue: 0, severity_Fever: 0, severity_Nausea: 0 });
   };
- 
+
   const urgencyColor = { Immediate: "#ff4444", Soon: "#ffaa00", Routine: "#00d4aa" };
   const cc = (c) => c === "High" ? "#4d9fff" : c === "Medium" ? "#ffaa00" : "#5a8090";
   const riskColor = (s) => s > 70 ? "#ff4444" : s > 40 ? "#ffaa00" : "#00d4aa";
- 
+
   return (
     <div className="raredx-wrap">
       <div className="raredx-inner">
@@ -464,14 +543,14 @@ export default function App() {
           <div style={{ marginBottom: "14px" }}>
             <button onClick={() => setShowHistory(!showHistory)}
               style={{ padding: "7px 18px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", color: "#6a8aaa", cursor: "pointer", fontSize: "0.82rem", fontFamily: "inherit", transition: "all 0.2s" }}>
-              📋 {showHistory ? "Hide History" : `History (${history.length})`}
+              📋 {showHistory ? t.hideHistory : `${t.showHistory} (${history.length})`}
             </button>
           </div>
           {showHistory && (
             <div className="card" style={{ marginBottom: "20px", textAlign: "left" }}>
-              <div className="section-title" style={{ marginBottom: "14px" }}>📋 Past Diagnoses</div>
+              <div className="section-title" style={{ marginBottom: "14px" }}>📋 {t.pastDiagnoses}</div>
               {history.length === 0 ? (
-                <p style={{ color: "#3a5070", fontSize: "0.85rem" }}>No past diagnoses yet.</p>
+                <p style={{ color: "#3a5070", fontSize: "0.85rem" }}>{t.noPastDiagnoses}</p>
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {history.map((h) => (
@@ -486,7 +565,7 @@ export default function App() {
                   ))}
                   <button onClick={() => { setHistory([]); localStorage.removeItem("raredx_history"); }}
                     style={{ padding: "7px", background: "transparent", border: "1px solid rgba(255,50,50,0.2)", borderRadius: "8px", color: "#ff6666", cursor: "pointer", fontSize: "0.78rem", fontFamily: "inherit" }}>
-                    🗑️ Clear History
+                    {t.clearHistory}
                   </button>
                 </div>
               )}
@@ -498,7 +577,7 @@ export default function App() {
             ))}
           </div>
         </div>
- 
+
         {step === "form" && (
           <div className="card">
             <div className="card-title">{t.formTitle}</div>
@@ -516,25 +595,25 @@ export default function App() {
                 <input name={f.name} value={form[f.name]} onChange={handleChange} placeholder={f.placeholder} className="field-input" />
               </div>
             ))}
- 
+
             {/* Severity Sliders */}
             <div className="field">
-              <label className="field-label">Symptom Severity (0-10)</label>
+              <label className="field-label">{t.severityTitle}</label>
               <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: "12px", padding: "16px", display: "flex", flexDirection: "column", gap: "14px" }}>
-                {SEVERITY_SYMPTOMS.map((symptom) => (
-                  <div key={symptom}>
+                {severitySymptoms.map(({ key: symptomKey, label: symptomLabel }) => (
+                  <div key={symptomKey}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
-                      <span style={{ color: "#6a8aaa", fontSize: "0.82rem", fontWeight: "600" }}>{symptom}</span>
-                      <span style={{ color: form["severity_" + symptom] > 6 ? "#ff4444" : form["severity_" + symptom] > 3 ? "#ffaa00" : "#4d9fff", fontSize: "0.82rem", fontWeight: "700" }}>{form["severity_" + symptom]}/10</span>
+                      <span style={{ color: "#6a8aaa", fontSize: "0.82rem", fontWeight: "600" }}>{symptomLabel}</span>
+                      <span style={{ color: form["severity_" + symptomKey] > 6 ? "#ff4444" : form["severity_" + symptomKey] > 3 ? "#ffaa00" : "#4d9fff", fontSize: "0.82rem", fontWeight: "700" }}>{form["severity_" + symptomKey]}/10</span>
                     </div>
-                    <input type="range" min="0" max="10" value={form["severity_" + symptom]}
-                      onChange={(e) => setForm(prev => ({ ...prev, ["severity_" + symptom]: e.target.value }))}
+                    <input type="range" min="0" max="10" value={form["severity_" + symptomKey]}
+                      onChange={(e) => setForm(prev => ({ ...prev, ["severity_" + symptomKey]: e.target.value }))}
                       style={{ width: "100%", cursor: "pointer" }} />
                   </div>
                 ))}
               </div>
             </div>
- 
+
             {/* Symptoms + Voice */}
             <div className="field">
               <div className="symptoms-header">
@@ -543,31 +622,42 @@ export default function App() {
               </div>
               <textarea name="symptoms" value={form.symptoms} onChange={handleChange} placeholder={t.symptomsPlaceholder} className="field-textarea" />
             </div>
- 
-            {/* Body Parts */}
+
+            {/* Body Parts - fully translated */}
             <div className="field">
               <label className="field-label">{t.bodyParts}</label>
               <div className="body-parts-grid">
-                {BODY_PARTS.map(part => (
-                  <button key={part.id} onClick={() => toggleBodyPart(part)} className={`body-part-btn ${selectedBodyParts.includes(part.label) ? "selected" : ""}`}>
-                    {part.icon} {part.label}
+                {BODY_PART_KEYS.map((key, idx) => (
+                  <button key={key} onClick={() => toggleBodyPart(key)} className={`body-part-btn ${selectedBodyParts.includes(key) ? "selected" : ""}`}>
+                    {BODY_PART_ICONS[idx]} {t.bodyPartLabels[idx]}
                   </button>
                 ))}
               </div>
-              {selectedBodyParts.length > 0 && <div className="selected-text">✓ {t.selected}: {selectedBodyParts.join(", ")}</div>}
+              {selectedBodyParts.length > 0 && <div className="selected-text">✓ {t.selected}: {selectedBodyParts.map(k => t.bodyPartLabels[BODY_PART_KEYS.indexOf(k)]).join(", ")}</div>}
             </div>
- 
-            {/* File Upload */}
+
+            {/* Custom File Upload */}
             <div className="field">
               <label className="field-label">{t.uploadReport}</label>
-              <input type="file" accept="image/*,.pdf" onChange={handleFileUpload} className="file-input" />
-              {uploadedFile && <div className="file-ready">✅ {uploadedFile.name} {t.uploadReady}</div>}
+              <label style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(0,0,0,0.2)", border: "1px dashed rgba(255,255,255,0.1)", borderRadius: "10px", padding: "12px 14px", cursor: "pointer", transition: "border-color 0.2s" }}
+                onMouseOver={e => e.currentTarget.style.borderColor = "rgba(0,150,255,0.3)"}
+                onMouseOut={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"}>
+                <input type="file" accept="image/*,.pdf" onChange={handleFileUpload} style={{ display: "none" }} />
+                <span style={{ padding: "6px 14px", background: "linear-gradient(135deg, #0055dd, #0099bb)", borderRadius: "8px", color: "#fff", fontSize: "0.82rem", fontWeight: "600", whiteSpace: "nowrap" }}>{t.chooseFile}</span>
+                <span style={{ color: uploadedFile ? "#00d4aa" : "#3a5070", fontSize: "0.85rem" }}>
+                  {uploadedFile ? "✅ " + uploadedFile.name : t.noFileChosen}
+                </span>
+              </label>
             </div>
- 
+
             <button onClick={analyze} disabled={!form.age || !form.symptoms} className="analyze-btn">{t.analyzeBtn} →</button>
+            <div style={{ textAlign: "center", padding: "12px", marginTop: "8px", color: "#2a3a4a", fontSize: "0.72rem", lineHeight: "1.8" }}>
+              © {new Date().getFullYear()} RareDx. All Rights Reserved.<br />
+              🧬 Turning Years of Suffering into Seconds of Clarity
+            </div>
           </div>
         )}
- 
+
         {step === "loading" && (
           <div className="loading-wrap">
             <div className="loading-icon">🔬</div>
@@ -580,7 +670,7 @@ export default function App() {
             </div>
           </div>
         )}
- 
+
         {step === "result" && result && (
           <div>
             {result.urgency === "Immediate" && (
@@ -591,17 +681,14 @@ export default function App() {
                 <button className="emergency-btn" onClick={() => window.open("https://www.google.com/maps/search/emergency+hospital+near+me", "_blank")}>{t.emergencyBtn}</button>
               </div>
             )}
- 
-            {/* Risk Score Meter */}
+
             {result.riskScore && (
               <div className="card" style={{ textAlign: "center" }}>
-                <div className="section-title" style={{ marginBottom: "16px" }}>⚠️ Overall Risk Score</div>
+                <div className="section-title" style={{ marginBottom: "16px" }}>{t.riskTitle}</div>
                 <div style={{ position: "relative", width: "150px", height: "150px", margin: "0 auto 16px" }}>
                   <svg viewBox="0 0 150 150" style={{ width: "100%", height: "100%", transform: "rotate(-90deg)" }}>
                     <circle cx="75" cy="75" r="60" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="12" />
-                    <circle cx="75" cy="75" r="60" fill="none"
-                      stroke={riskColor(result.riskScore)} strokeWidth="12" strokeLinecap="round"
-                      strokeDasharray={`${(result.riskScore / 100) * 377} 377`} />
+                    <circle cx="75" cy="75" r="60" fill="none" stroke={riskColor(result.riskScore)} strokeWidth="12" strokeLinecap="round" strokeDasharray={`${(result.riskScore / 100) * 377} 377`} />
                   </svg>
                   <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", textAlign: "center" }}>
                     <div style={{ fontSize: "1.8rem", fontWeight: "800", color: riskColor(result.riskScore), fontFamily: "'Outfit', sans-serif" }}>{result.riskScore}</div>
@@ -609,13 +696,12 @@ export default function App() {
                   </div>
                 </div>
                 <div style={{ color: riskColor(result.riskScore), fontWeight: "700", fontSize: "0.9rem", marginBottom: "6px" }}>
-                  {result.riskScore > 70 ? "🔴 High Risk" : result.riskScore > 40 ? "🟡 Moderate Risk" : "🟢 Low Risk"}
+                  {result.riskScore > 70 ? t.riskHigh : result.riskScore > 40 ? t.riskMedium : t.riskLow}
                 </div>
-                <div style={{ color: "#5a7a9a", fontSize: "0.8rem" }}>Based on symptoms, severity and duration</div>
+                <div style={{ color: "#5a7a9a", fontSize: "0.8rem" }}>{t.riskSubtitle}</div>
               </div>
             )}
- 
-            {/* Case Summary */}
+
             <div className="card">
               <div className="result-header">
                 <div className="section-title">{t.caseSummary}</div>
@@ -625,11 +711,12 @@ export default function App() {
                     const text = `🧬 *RareDx Medical Report*\n\n👤 Patient: ${form.age}yr ${form.gender}\n⚡ Urgency: ${result.urgency}\n🔴 Risk Score: ${result.riskScore}/100\n\n📋 *Summary:*\n${result.summary}\n\n🎯 *Possible Conditions:*\n${result.possibleConditions.map((c, i) => `${i + 1}. ${c.name} (${c.confidence} Match - ${c.confidencePercent}%)\n   ${c.description}\n   ✅ Next Steps: ${c.nextSteps}`).join("\n\n")}\n\n💡 *General Advice:*\n${result.generalAdvice}\n\n⚠️ AI-generated. Always consult a qualified doctor.\n_Generated by RareDx_`;
                     navigator.clipboard.writeText(text);
                     alert("Report copied! Paste in WhatsApp, Email or any app.");
-                  }}>📋 Copy</button>
+                    }}>📋 {t.copyBtn}</button>
+                  
                   <button className="print-btn" onClick={() => {
                     const text = `🧬 RareDx Report - ${form.age}yr ${form.gender} - Risk: ${result.riskScore}/100 - Urgency: ${result.urgency} - ${result.possibleConditions.map(c => c.name).join(", ")}`;
                     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
-                  }}>💚 WA</button>
+                  }}>💚 {t.waBtn}</button>
                 </div>
               </div>
               <p className="summary-text">{result.summary}</p>
@@ -644,11 +731,10 @@ export default function App() {
                 <span className="badge" style={{ background: "rgba(77,159,255,0.1)", color: "#4d9fff", border: "1px solid rgba(77,159,255,0.2)" }}>👤 {form.age}yr {form.gender}</span>
               </div>
             </div>
- 
-            {/* Similar Patient Stories */}
+
             {result.similarStories && result.similarStories.length > 0 && (
               <div className="card">
-                <div className="section-title" style={{ marginBottom: "14px" }}>👥 Similar Patient Stories</div>
+                <div className="section-title" style={{ marginBottom: "14px" }}>{t.similarStories}</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {result.similarStories.map((story, i) => (
                     <div key={i} style={{ background: "rgba(77,159,255,0.05)", border: "1px solid rgba(77,159,255,0.1)", borderRadius: "10px", padding: "12px 14px", display: "flex", gap: "10px" }}>
@@ -659,8 +745,7 @@ export default function App() {
                 </div>
               </div>
             )}
- 
-            {/* Possible Conditions */}
+
             <div className="results-section-title">{t.possibleConditions}</div>
             {result.possibleConditions.map((c, i) => (
               <div key={i} className="condition-card" style={{ borderLeftColor: cc(c.confidence) }}>
@@ -686,11 +771,9 @@ export default function App() {
                   <div className="next-steps-label">{t.nextSteps}</div>
                   <div className="next-steps-text">{c.nextSteps}</div>
                 </div>
- 
-                {/* Treatment Timeline */}
                 {c.treatmentTimeline && c.treatmentTimeline.length > 0 && (
                   <div style={{ marginTop: "12px" }}>
-                    <div style={{ color: "#4d9fff", fontSize: "0.75rem", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "10px" }}>🗓️ Treatment Timeline</div>
+                    <div style={{ color: "#4d9fff", fontSize: "0.75rem", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "10px" }}>{t.treatmentTimeline}</div>
                     <div className="timeline">
                       {c.treatmentTimeline.map((step, idx) => (
                         <div key={idx} className="timeline-item">
@@ -706,17 +789,15 @@ export default function App() {
                 )}
               </div>
             ))}
- 
-            {/* General Advice */}
+
             <div className="card">
               <div className="section-title" style={{ marginBottom: "12px" }}>{t.generalAdvice}</div>
               <p className="advice-text">{result.generalAdvice}</p>
             </div>
- 
-            {/* Diet Tips */}
+
             {result.dietTips && (
               <div className="card">
-                <div className="section-title" style={{ marginBottom: "14px" }}>🥗 Diet & Lifestyle Tips</div>
+                <div className="section-title" style={{ marginBottom: "14px" }}>{t.dietTitle}</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {result.dietTips.map((tip, i) => (
                     <div key={i} style={{ display: "flex", gap: "12px", alignItems: "flex-start", background: "rgba(0,200,100,0.05)", border: "1px solid rgba(0,200,100,0.1)", borderRadius: "10px", padding: "12px" }}>
@@ -730,18 +811,16 @@ export default function App() {
                 </div>
               </div>
             )}
- 
-            {/* Appointment Reminder */}
+
             <div className="card">
-              <div className="section-title" style={{ marginBottom: "8px" }}>📅 Appointment Reminder</div>
-              <p style={{ color: "#5a7a9a", fontSize: "0.84rem", marginBottom: "14px", lineHeight: "1.6" }}>Set a Google Calendar reminder to follow up with your doctor in 7 days.</p>
+              <div className="section-title" style={{ marginBottom: "8px" }}>{t.appointmentTitle}</div>
+              <p style={{ color: "#5a7a9a", fontSize: "0.84rem", marginBottom: "14px", lineHeight: "1.6" }}>{t.appointmentDesc}</p>
               <button onClick={setAppointmentReminder}
                 style={{ width: "100%", padding: "12px", background: reminderSet ? "rgba(0,212,170,0.1)" : "rgba(0,100,255,0.08)", border: `1px solid ${reminderSet ? "rgba(0,212,170,0.3)" : "rgba(0,150,255,0.3)"}`, borderRadius: "10px", color: reminderSet ? "#00d4aa" : "#4d9fff", fontWeight: "600", cursor: "pointer", fontFamily: "inherit", fontSize: "0.92rem", transition: "all 0.2s" }}>
-                {reminderSet ? "✅ Reminder Set in Google Calendar!" : "📅 Set Appointment Reminder"}
+                {reminderSet ? t.reminderSetText : t.appointmentBtn}
               </button>
             </div>
- 
-            {/* Find Specialist */}
+
             <div className="card">
               <div className="section-title" style={{ marginBottom: "14px" }}>{t.findSpecialist}</div>
               <div className="specialist-grid">
@@ -755,8 +834,7 @@ export default function App() {
                 </button>
               </div>
             </div>
- 
-            {/* Chat */}
+
             <div className="card">
               <div className="section-title" style={{ marginBottom: "14px" }}>{t.chatTitle}</div>
               <div className="chat-messages">
@@ -765,35 +843,33 @@ export default function App() {
                     <div className={`chat-bubble ${msg.role}`}>{msg.text}</div>
                   </div>
                 ))}
-                {chatLoading && <div className="chat-msg assistant"><div className="chat-bubble assistant thinking">Thinking...</div></div>}
+                {chatLoading && <div className="chat-msg assistant"><div className="chat-bubble assistant thinking">{t.thinking}</div></div>}
               </div>
               <div className="chat-input-row">
                 <input value={chatInput} onChange={e => setChatInput(e.target.value)} onKeyDown={e => e.key === "Enter" && sendChat()} placeholder={t.chatPlaceholder} className="chat-input" />
                 <button onClick={sendChat} className="chat-send">{t.sendBtn}</button>
               </div>
             </div>
- 
-            {/* Second Opinion */}
+
             <div className="card">
               <div className="section-title" style={{ marginBottom: "6px" }}>{t.secondOpinion}</div>
               <p className="second-opinion-desc">{t.secondOpinionDesc}</p>
               <button onClick={analyze} className="second-btn">{t.secondOpinionBtn}</button>
             </div>
- 
-            {/* Disclaimer */}
+
             <div className="card disclaimer-card">
               <div className="disclaimer-title">{t.disclaimer}</div>
               <p className="disclaimer-text">{t.disclaimerText1} <span className="disclaimer-bold">{t.disclaimerBold}</span></p>
               <p className="disclaimer-text">{t.disclaimerText2}</p>
               <p className="disclaimer-footer">{t.disclaimerFooter}</p>
             </div>
- 
+
             <button onClick={reset} className="reset-btn">{t.newAnalysis}</button>
             <div style={{ textAlign: "center", padding: "16px", marginTop: "8px", borderTop: "1px solid rgba(255,255,255,0.05)", color: "#2a3a4a", fontSize: "0.75rem", lineHeight: "1.8" }}>
-  © {new Date().getFullYear()} RareDx. All Rights Reserved.<br/>
-  Built by Team Laksitha · Powered by Gemini AI · Deployed on Vercel<br/>
-  🧬 Turning Years of Suffering into Seconds of Clarity
-</div>
+              © {new Date().getFullYear()} RareDx. All Rights Reserved.<br />
+              Built by Team Laksitha · Powered by Gemini AI · Deployed on Vercel<br />
+              🧬 Turning Years of Suffering into Seconds of Clarity
+            </div>
           </div>
         )}
       </div>
