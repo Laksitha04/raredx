@@ -732,20 +732,7 @@ export default function App() {
               </div>
             </div>
 
-            {result.similarStories && result.similarStories.length > 0 && (
-              <div className="card">
-                <div className="section-title" style={{ marginBottom: "14px" }}>{t.similarStories}</div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-                  {result.similarStories.map((story, i) => (
-                    <div key={i} style={{ background: "rgba(77,159,255,0.05)", border: "1px solid rgba(77,159,255,0.1)", borderRadius: "10px", padding: "12px 14px", display: "flex", gap: "10px" }}>
-                      <span style={{ fontSize: "1.2rem", flexShrink: 0 }}>💬</span>
-                      <p style={{ color: "#8aabcf", fontSize: "0.87rem", lineHeight: "1.55" }}>{story}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
+           
             <div className="results-section-title">{t.possibleConditions}</div>
             {result.possibleConditions.map((c, i) => (
               <div key={i} className="condition-card" style={{ borderLeftColor: cc(c.confidence) }}>
@@ -825,7 +812,7 @@ export default function App() {
               <div className="section-title" style={{ marginBottom: "14px" }}>{t.findSpecialist}</div>
               <div className="specialist-grid">
                 {result.possibleConditions.map((c, i) => (
-                  <button key={i} className="specialist-btn" onClick={() => window.open(`https://www.google.com/maps/search/${c.name.split(" ")[0]}+specialist+near+me`, "_blank")}>
+                  <button key={i} className="specialist-btn" onClick={() => window.open(`https://www.google.com/maps/search/${c.nextSteps.split(",")[0].trim()}+near+me`, "_blank")}>
                     🔍 {c.name}
                   </button>
                 ))}
