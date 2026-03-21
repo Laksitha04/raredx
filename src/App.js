@@ -49,11 +49,11 @@ const TRANSLATIONS = {
     riskSubtitle: "Based on symptoms, severity and duration",
     treatmentTimeline: "🗓️ Treatment Timeline",
     similarStories: "👥 Similar Patient Stories",
-    thinking: "Thinking...",
+
     copyBtn: "Copy", waBtn: "WA",
     thinking: "Thinking...",
     bodyPartLabels: ["Head","Neck","Chest","Abdomen","Back","Left Arm","Right Arm","Left Leg","Right Leg","Joints"],
-    bodyPartLabels: ["Head","Neck","Chest","Abdomen","Back","Left Arm","Right Arm","Left Leg","Right Leg","Joints"],
+    
   },
   ta: {
     title: "RareDx", subtitle: "AI-சக்தி வாய்ந்த அரிய நோய் கண்டறியும் உதவியாளர்",
