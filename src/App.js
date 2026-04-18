@@ -35,7 +35,7 @@ const TRANSLATIONS = {
     emergencyDesc: "Please seek emergency care immediately.",
     emergencyBtn: "Find Nearest Hospital", chatWelcome: "I've analyzed the symptoms. Ask me anything!",
     chatWelcomeReport: "I've analyzed the symptoms and your report. Ask me anything!", match: "Match",
-    severityTitle: "Symptom Severity (0-10)",
+    
     pain: "Pain", fatigue: "Fatigue", fever: "Fever", nausea: "Nausea",
     pastDiagnoses: "Past Diagnoses", hideHistory: "Hide History", showHistory: "History",
     clearHistory: "🗑️ Clear History", noPastDiagnoses: "No past diagnoses yet.",
@@ -88,7 +88,7 @@ const TRANSLATIONS = {
     emergencyDesc: "உடனடியாக அவசர சிகிச்சை பெறுங்கள்.",
     emergencyBtn: "அருகிலுள்ள மருத்துவமனை", chatWelcome: "அறிகுறிகளை பகுப்பாய்வு செய்தேன். கேளுங்கள்!",
     chatWelcomeReport: "அறிகுறிகள் மற்றும் அறிக்கையை பகுப்பாய்வு செய்தேன்!", match: "பொருத்தம்",
-    severityTitle: "அறிகுறி தீவிரம் (0-10)",
+    
     pain: "வலி", fatigue: "சோர்வு", fever: "காய்ச்சல்", nausea: "குமட்டல்",
     pastDiagnoses: "கடந்த கால நோய் கண்டறிதல்", hideHistory: "வரலாற்றை மறை", showHistory: "வரலாறு",
     clearHistory: "🗑️ வரலாற்றை அழி", noPastDiagnoses: "இன்னும் கண்டறிதல் வரலாறு இல்லை.",
@@ -139,7 +139,7 @@ const TRANSLATIONS = {
     emergencyDesc: "कृपया तुरंत आपातकालीन देखभाल लें।",
     emergencyBtn: "निकटतम अस्पताल", chatWelcome: "लक्षणों का विश्लेषण किया। पूछें!",
     chatWelcomeReport: "लक्षण और रिपोर्ट का विश्लेषण किया!", match: "मिलान",
-    severityTitle: "लक्षण गंभीरता (0-10)",
+    
     pain: "दर्द", fatigue: "थकान", fever: "बुखार", nausea: "मतली",
     pastDiagnoses: "पिछले निदान", hideHistory: "इतिहास छुपाएं", showHistory: "इतिहास",
     clearHistory: "🗑️ इतिहास साफ करें", noPastDiagnoses: "अभी तक कोई निदान नहीं।",
@@ -190,7 +190,7 @@ const TRANSLATIONS = {
     emergencyDesc: "దయచేసి వెంటనే అత్యవసర సంరక్షణ తీసుకోండి.",
     emergencyBtn: "సమీప ఆసుపత్రి", chatWelcome: "లక్షణాలను విశ్లేషించాను. అడగండి!",
     chatWelcomeReport: "లక్షణాలు మరియు నివేదికను విశ్లేషించాను!", match: "సరిపోలిక",
-    severityTitle: "లక్షణ తీవ్రత (0-10)",
+    
     pain: "నొప్పి", fatigue: "అలసట", fever: "జ్వరం", nausea: "వికారం",
     pastDiagnoses: "గత నిర్ధారణలు", hideHistory: "చరిత్ర దాచు", showHistory: "చరిత్ర",
     clearHistory: "🗑️ చరిత్ర తొలగించు", noPastDiagnoses: "ఇంకా నిర్ధారణ చరిత్ర లేదు.",
@@ -241,7 +241,7 @@ const TRANSLATIONS = {
     emergencyDesc: "ഉടനടി അടിയന്തര പരിചരണം തേടുക.",
     emergencyBtn: "ഏറ്റവും അടുത്ത ആശുപത്രി", chatWelcome: "ലക്ഷണങ്ങൾ വിശകലനം ചെയ്തു. ചോദിക്കൂ!",
     chatWelcomeReport: "ലക്ഷണങ്ങളും റിപ്പോർട്ടും വിശകലനം ചെയ്തു!", match: "പൊരുത്തം",
-    severityTitle: "ലക്ഷണ തീവ്രത (0-10)",
+    
     pain: "വേദന", fatigue: "ക്ഷീണം", fever: "പനി", nausea: "ഓക്കാനം",
     pastDiagnoses: "മുൻ നിർണ്ണയങ്ങൾ", hideHistory: "ചരിത്രം മറയ്ക്കുക", showHistory: "ചരിത്രം",
     clearHistory: "🗑️ ചരിത്രം മായ്ക്കുക", noPastDiagnoses: "ഇതുവരെ നിർണ്ണയ ചരിത്രം ഇല്ല.",
@@ -412,9 +412,8 @@ export default function App() {
     try { return JSON.parse(localStorage.getItem("raredx_history") || "[]"); } catch { return []; }
   });
   const [form, setForm] = useState({
-    age: "", gender: "", symptoms: "", duration: "", testsAlreadyDone: "",
-    severity_Pain: 0, severity_Fatigue: 0, severity_Fever: 0, severity_Nausea: 0,
-  });
+  age: "", gender: "", symptoms: "", duration: "", testsAlreadyDone: "",
+});
   const recognitionRef = useRef(null);
 
   useEffect(() => {
@@ -463,12 +462,7 @@ export default function App() {
     setReminderSet(true);
   };
 
-  const severitySymptoms = [
-    { key: "Pain", label: t.pain },
-    { key: "Fatigue", label: t.fatigue },
-    { key: "Fever", label: t.fever },
-    { key: "Nausea", label: t.nausea },
-  ];
+  
 
   const analyze = async () => {
     setStep("loading");
@@ -478,14 +472,14 @@ export default function App() {
     const dbMatches = matchDiseases(form.symptoms);
     const topDiseasesFromDB = dbMatches.map(d => `${d.name} (matched symptoms: ${d.matchedSymptoms.join(", ")})`).join("\n");
     const bodyPartsText = selectedBodyParts.length > 0 ? `Affected body parts: ${selectedBodyParts.join(", ")}` : "";
-    const severityText = severitySymptoms.map(s => `${s.key} severity: ${form["severity_" + s.key]}/10`).join(", ");
+    
     const langName = LANGUAGES.find(l => l.code === selectedLanguage)?.label || "English";
     const langInstruction = selectedLanguage !== "en"
       ? `Respond ENTIRELY in ${langName} language. Keep disease names in English only. Translate ALL other text including summary, descriptions, advice, diet category names, and all labels to ${langName}.`
       : "";
     const reportNote = uploadedFile ? "key findings" : "";
     const reportText = uploadedFile ? `Medical report "${uploadedFile.name}" uploaded. Consider this too.` : "";
-    const prompt = `You are a rare disease diagnostic assistant. Based on verified Orphanet database matching, these diseases were identified as possible matches:\n\n${topDiseasesFromDB}\n\nPatient info:\nAge: ${form.age}, Gender: ${form.gender}, Symptoms: ${form.symptoms}\nSeverity: ${severityText}\n${bodyPartsText}\nDuration: ${form.duration}, Tests done: ${form.testsAlreadyDone}\n${reportText}\n${langInstruction}\n\nProvide enriched diagnosis. Return ONLY this JSON:\n{"summary":"brief summary","reportFindings":"${reportNote}","riskScore":72,"similarStories":["story1","story2","story3"],"possibleConditions":[{"name":"Disease","confidence":"High/Medium/Low","confidencePercent":85,"description":"brief","affectedPeople":"number","avgDiagnosisTime":"time","nextSteps":"tests","treatmentTimeline":["Week 1-2: tests","Month 1: specialist","Month 2-3: treatment","Month 6+: monitoring"]}],"urgency":"Immediate/Soon/Routine","generalAdvice":"advice","dietTips":[{"icon":"🥗","category":"Diet","advice":"advice"},{"icon":"💧","category":"Hydration","advice":"advice"},{"icon":"🏃","category":"Exercise","advice":"advice"},{"icon":"😴","category":"Sleep","advice":"advice"},{"icon":"🧘","category":"Stress","advice":"advice"}]}`;
+    const prompt = `You are a rare disease diagnostic assistant. Based on verified Orphanet database matching, these diseases were identified as possible matches:\n\n${topDiseasesFromDB}\n\nPatient info:\nAge: ${form.age}, Gender: ${form.gender}, Symptoms: ${form.symptoms}\n${bodyPartsText}\nDuration: ${form.duration}, Tests done: ${form.testsAlreadyDone}\n${reportText}\n${langInstruction}\n\nProvide enriched diagnosis. Return ONLY this JSON:\n{"summary":"brief summary","reportFindings":"${reportNote}","riskScore":72,"similarStories":["story1","story2","story3"],"possibleConditions":[{"name":"Disease","confidence":"High/Medium/Low","confidencePercent":85,"description":"brief","affectedPeople":"number","avgDiagnosisTime":"time","nextSteps":"tests","treatmentTimeline":["Week 1-2: tests","Month 1: specialist","Month 2-3: treatment","Month 6+: monitoring"]}],"urgency":"Immediate/Soon/Routine","generalAdvice":"advice","dietTips":[{"icon":"🥗","category":"Diet","advice":"advice"},{"icon":"💧","category":"Hydration","advice":"advice"},{"icon":"🏃","category":"Exercise","advice":"advice"},{"icon":"😴","category":"Sleep","advice":"advice"},{"icon":"🧘","category":"Stress","advice":"advice"}]}`;
     try {
       const parts = [];
       if (uploadedFileBase64 && uploadedFileMime) parts.push({ inline_data: { mime_type: uploadedFileMime, data: uploadedFileBase64 } });
@@ -501,7 +495,8 @@ export default function App() {
       setResult(parsed);
       setChatMessages([{ role: "assistant", text: uploadedFile ? t.chatWelcomeReport : t.chatWelcome }]);
       setStep("result");
-    } catch { alert("Something went wrong. Check your API key."); setStep("form"); }
+    }   catch { alert("Something went wrong. Check your API key."); setStep("form"); }
+
   };
 
   const sendChat = async () => {
@@ -524,7 +519,7 @@ export default function App() {
     setStep("form"); setResult(null); setChatMessages([]);
     setUploadedFile(null); setUploadedFileBase64(null); setUploadedFileMime(null);
     setSelectedBodyParts([]); setReminderSet(false);
-    setForm({ age: "", gender: "", symptoms: "", duration: "", testsAlreadyDone: "", severity_Pain: 0, severity_Fatigue: 0, severity_Fever: 0, severity_Nausea: 0 });
+   setForm({ age: "", gender: "", symptoms: "", duration: "", testsAlreadyDone: "" });
   };
 
   const urgencyColor = { Immediate: "#ff4444", Soon: "#ffaa00", Routine: "#00d4aa" };
@@ -601,23 +596,8 @@ export default function App() {
               </div>
             ))}
 
-            {/* Severity Sliders */}
-            <div className="field">
-              <label className="field-label">{t.severityTitle}</label>
-              <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: "12px", padding: "16px", display: "flex", flexDirection: "column", gap: "14px" }}>
-                {severitySymptoms.map(({ key: symptomKey, label: symptomLabel }) => (
-                  <div key={symptomKey}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
-                      <span style={{ color: "#6a8aaa", fontSize: "0.82rem", fontWeight: "600" }}>{symptomLabel}</span>
-                      <span style={{ color: form["severity_" + symptomKey] > 6 ? "#ff4444" : form["severity_" + symptomKey] > 3 ? "#ffaa00" : "#4d9fff", fontSize: "0.82rem", fontWeight: "700" }}>{form["severity_" + symptomKey]}/10</span>
-                    </div>
-                    <input type="range" min="0" max="10" value={form["severity_" + symptomKey]}
-                      onChange={(e) => setForm(prev => ({ ...prev, ["severity_" + symptomKey]: e.target.value }))}
-                      style={{ width: "100%", cursor: "pointer" }} />
-                  </div>
-                ))}
-              </div>
-            </div>
+            
+              
 
             {/* Symptoms + Voice */}
             <div className="field">
