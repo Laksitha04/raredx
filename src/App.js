@@ -1,11 +1,11 @@
 import { matchDiseases } from './diseaseDatabase';
 import { useState, useRef, useEffect } from "react";
+import Encyclopedia from './Encyclopedia';
 
 const TRANSLATIONS = {
   en: {
     title: "RareDx", subtitle: "AI-powered Rare Disease Diagnosis Assistant",
     stat1: "People with rare diseases", stat2: "Diseases in database", stat3: "Avg diagnosis delay",
-    stat1Num: "300M+", stat2Num: "100+", stat3Num: "4–5 yrs",
     formTitle: "Patient Information", age: "Age", agePlaceholder: "e.g. 28",
     gender: "Gender", genderPlaceholder: "e.g. Female",
     duration: "Duration of Symptoms", durationPlaceholder: "e.g. 6 months",
@@ -35,7 +35,7 @@ const TRANSLATIONS = {
     emergencyDesc: "Please seek emergency care immediately.",
     emergencyBtn: "Find Nearest Hospital", chatWelcome: "I've analyzed the symptoms. Ask me anything!",
     chatWelcomeReport: "I've analyzed the symptoms and your report. Ask me anything!", match: "Match",
-    
+    severityTitle: "Symptom Severity (0-10)",
     pain: "Pain", fatigue: "Fatigue", fever: "Fever", nausea: "Nausea",
     pastDiagnoses: "Past Diagnoses", hideHistory: "Hide History", showHistory: "History",
     clearHistory: "🗑️ Clear History", noPastDiagnoses: "No past diagnoses yet.",
@@ -49,16 +49,13 @@ const TRANSLATIONS = {
     riskSubtitle: "Based on symptoms, severity and duration",
     treatmentTimeline: "🗓️ Treatment Timeline",
     similarStories: "👥 Similar Patient Stories",
-
-    copyBtn: "Copy", waBtn: "WA",
     thinking: "Thinking...",
+    encyclopediaBtn: "📚 Disease Encyclopedia",
     bodyPartLabels: ["Head","Neck","Chest","Abdomen","Back","Left Arm","Right Arm","Left Leg","Right Leg","Joints"],
-    
   },
   ta: {
     title: "RareDx", subtitle: "AI-சக்தி வாய்ந்த அரிய நோய் கண்டறியும் உதவியாளர்",
     stat1: "அரிய நோயால் பாதிக்கப்பட்டவர்கள்", stat2: "தரவுத்தளத்தில் நோய்கள்", stat3: "சராசரி கண்டறிதல் தாமதம்",
-    stat1Num: "30 கோடி+", stat2Num: "100+", stat3Num: "4–5 ஆண்டுகள்",
     formTitle: "நோயாளி தகவல்", age: "வயது", agePlaceholder: "எ.கா. 28",
     gender: "பாலினம்", genderPlaceholder: "எ.கா. பெண்",
     duration: "அறிகுறிகளின் காலம்", durationPlaceholder: "எ.கா. 6 மாதங்கள்",
@@ -88,7 +85,7 @@ const TRANSLATIONS = {
     emergencyDesc: "உடனடியாக அவசர சிகிச்சை பெறுங்கள்.",
     emergencyBtn: "அருகிலுள்ள மருத்துவமனை", chatWelcome: "அறிகுறிகளை பகுப்பாய்வு செய்தேன். கேளுங்கள்!",
     chatWelcomeReport: "அறிகுறிகள் மற்றும் அறிக்கையை பகுப்பாய்வு செய்தேன்!", match: "பொருத்தம்",
-    
+    severityTitle: "அறிகுறி தீவிரம் (0-10)",
     pain: "வலி", fatigue: "சோர்வு", fever: "காய்ச்சல்", nausea: "குமட்டல்",
     pastDiagnoses: "கடந்த கால நோய் கண்டறிதல்", hideHistory: "வரலாற்றை மறை", showHistory: "வரலாறு",
     clearHistory: "🗑️ வரலாற்றை அழி", noPastDiagnoses: "இன்னும் கண்டறிதல் வரலாறு இல்லை.",
@@ -103,13 +100,11 @@ const TRANSLATIONS = {
     treatmentTimeline: "🗓️ சிகிச்சை காலவரிசை",
     similarStories: "👥 ஒத்த நோயாளர் கதைகள்",
     thinking: "யோசிக்கிறேன்...",
-    copyBtn: "நகலெடு", waBtn: "வாட்ஸ்அப்",
     bodyPartLabels: ["தலை","கழுத்து","மார்பு","வயிறு","முதுகு","இடது கை","வலது கை","இடது கால்","வலது கால்","மூட்டுகள்"],
   },
   hi: {
     title: "RareDx", subtitle: "AI-संचालित दुर्लभ रोग निदान सहायक",
     stat1: "दुर्लभ बीमारियों से प्रभावित", stat2: "डेटाबेस में बीमारियाँ", stat3: "औसत निदान देरी",
-    stat1Num: "30 करोड़+", stat2Num: "100+", stat3Num: "4–5 वर्ष",
     formTitle: "रोगी जानकारी", age: "आयु", agePlaceholder: "जैसे 28",
     gender: "लिंग", genderPlaceholder: "जैसे महिला",
     duration: "लक्षणों की अवधि", durationPlaceholder: "जैसे 6 महीने",
@@ -139,7 +134,7 @@ const TRANSLATIONS = {
     emergencyDesc: "कृपया तुरंत आपातकालीन देखभाल लें।",
     emergencyBtn: "निकटतम अस्पताल", chatWelcome: "लक्षणों का विश्लेषण किया। पूछें!",
     chatWelcomeReport: "लक्षण और रिपोर्ट का विश्लेषण किया!", match: "मिलान",
-    
+    severityTitle: "लक्षण गंभीरता (0-10)",
     pain: "दर्द", fatigue: "थकान", fever: "बुखार", nausea: "मतली",
     pastDiagnoses: "पिछले निदान", hideHistory: "इतिहास छुपाएं", showHistory: "इतिहास",
     clearHistory: "🗑️ इतिहास साफ करें", noPastDiagnoses: "अभी तक कोई निदान नहीं।",
@@ -154,13 +149,11 @@ const TRANSLATIONS = {
     treatmentTimeline: "🗓️ उपचार समयरेखा",
     similarStories: "👥 समान रोगी कहानियाँ",
     thinking: "सोच रहा हूं...",
-    copyBtn: "कॉपी", waBtn: "व्हाट्सएप",
     bodyPartLabels: ["सिर","गर्दन","छाती","पेट","पीठ","बायाँ हाथ","दायाँ हाथ","बायाँ पैर","दायाँ पैर","जोड़"],
   },
   te: {
     title: "RareDx", subtitle: "AI-ఆధారిత అరుదైన వ్యాధి నిర్ధారణ సహాయకుడు",
     stat1: "అరుదైన వ్యాధులతో బాధపడుతున్నవారు", stat2: "డేటాబేస్‌లో వ్యాధులు", stat3: "సగటు నిర్ధారణ జాప్యం",
-    stat1Num: "30 కోట్లు+", stat2Num: "100+", stat3Num: "4–5 సంవత్సరాలు",
     formTitle: "రోగి సమాచారం", age: "వయసు", agePlaceholder: "ఉదా. 28",
     gender: "లింగం", genderPlaceholder: "ఉదా. మహిళ",
     duration: "లక్షణాల వ్యవధి", durationPlaceholder: "ఉదా. 6 నెలలు",
@@ -190,7 +183,7 @@ const TRANSLATIONS = {
     emergencyDesc: "దయచేసి వెంటనే అత్యవసర సంరక్షణ తీసుకోండి.",
     emergencyBtn: "సమీప ఆసుపత్రి", chatWelcome: "లక్షణాలను విశ్లేషించాను. అడగండి!",
     chatWelcomeReport: "లక్షణాలు మరియు నివేదికను విశ్లేషించాను!", match: "సరిపోలిక",
-    
+    severityTitle: "లక్షణ తీవ్రత (0-10)",
     pain: "నొప్పి", fatigue: "అలసట", fever: "జ్వరం", nausea: "వికారం",
     pastDiagnoses: "గత నిర్ధారణలు", hideHistory: "చరిత్ర దాచు", showHistory: "చరిత్ర",
     clearHistory: "🗑️ చరిత్ర తొలగించు", noPastDiagnoses: "ఇంకా నిర్ధారణ చరిత్ర లేదు.",
@@ -205,13 +198,11 @@ const TRANSLATIONS = {
     treatmentTimeline: "🗓️ చికిత్స కాలక్రమం",
     similarStories: "👥 ఇలాంటి రోగుల కథలు",
     thinking: "ఆలోచిస్తున్నాను...",
-    copyBtn: "కాపీ", waBtn: "వాట్సాప్",
     bodyPartLabels: ["తల","మెడ","ఛాతీ","పొట్ట","వీపు","ఎడమ చేయి","కుడి చేయి","ఎడమ కాలు","కుడి కాలు","కీళ్ళు"],
   },
   ml: {
     title: "RareDx", subtitle: "AI-ശക്തിയുള്ള അപൂർവ രോഗ നിർണ്ണയ സഹായി",
     stat1: "അപൂർവ രോഗങ്ങൾ ബാധിച്ചവർ", stat2: "ഡാറ്റാബേസിലെ രോഗങ്ങൾ", stat3: "ശരാശരി നിർണ്ണയ കാലതാമസം",
-    stat1Num: "30 കോടി+", stat2Num: "100+", stat3Num: "4–5 വർഷം",
     formTitle: "രോഗി വിവരങ്ങൾ", age: "പ്രായം", agePlaceholder: "ഉദാ. 28",
     gender: "ലിംഗം", genderPlaceholder: "ഉദാ. സ്ത്രീ",
     duration: "ലക്ഷണങ്ങളുടെ ദൈർഘ്യം", durationPlaceholder: "ഉദാ. 6 മാസം",
@@ -241,7 +232,7 @@ const TRANSLATIONS = {
     emergencyDesc: "ഉടനടി അടിയന്തര പരിചരണം തേടുക.",
     emergencyBtn: "ഏറ്റവും അടുത്ത ആശുപത്രി", chatWelcome: "ലക്ഷണങ്ങൾ വിശകലനം ചെയ്തു. ചോദിക്കൂ!",
     chatWelcomeReport: "ലക്ഷണങ്ങളും റിപ്പോർട്ടും വിശകലനം ചെയ്തു!", match: "പൊരുത്തം",
-    
+    severityTitle: "ലക്ഷണ തീവ്രത (0-10)",
     pain: "വേദന", fatigue: "ക്ഷീണം", fever: "പനി", nausea: "ഓക്കാനം",
     pastDiagnoses: "മുൻ നിർണ്ണയങ്ങൾ", hideHistory: "ചരിത്രം മറയ്ക്കുക", showHistory: "ചരിത്രം",
     clearHistory: "🗑️ ചരിത്രം മായ്ക്കുക", noPastDiagnoses: "ഇതുവരെ നിർണ്ണയ ചരിത്രം ഇല്ല.",
@@ -256,7 +247,6 @@ const TRANSLATIONS = {
     treatmentTimeline: "🗓️ ചികിത്സ കാലഘട്ടം",
     similarStories: "👥 സമാന രോഗികളുടെ കഥകൾ",
     thinking: "ചിന്തിക്കുന്നു...",
-    copyBtn: "പകർത്തുക", waBtn: "വാട്സ്ആപ്പ്",
     bodyPartLabels: ["തല","കഴുത്ത്","നെഞ്ച്","വയർ","പുറം","ഇടത് കൈ","വലത് കൈ","ഇടത് കാൽ","വലത് കാൽ","സന്ധികൾ"],
   },
 };
@@ -408,12 +398,14 @@ export default function App() {
   const [selectedBodyParts, setSelectedBodyParts] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
   const [reminderSet, setReminderSet] = useState(false);
+  const [showEncyclopedia, setShowEncyclopedia] = useState(false);
   const [history, setHistory] = useState(() => {
     try { return JSON.parse(localStorage.getItem("raredx_history") || "[]"); } catch { return []; }
   });
   const [form, setForm] = useState({
-  age: "", gender: "", symptoms: "", duration: "", testsAlreadyDone: "",
-});
+    age: "", gender: "", symptoms: "", duration: "", testsAlreadyDone: "",
+    severity_Pain: 0, severity_Fatigue: 0, severity_Fever: 0, severity_Nausea: 0,
+  });
   const recognitionRef = useRef(null);
 
   useEffect(() => {
@@ -462,7 +454,12 @@ export default function App() {
     setReminderSet(true);
   };
 
-  
+  const severitySymptoms = [
+    { key: "Pain", label: t.pain },
+    { key: "Fatigue", label: t.fatigue },
+    { key: "Fever", label: t.fever },
+    { key: "Nausea", label: t.nausea },
+  ];
 
   const analyze = async () => {
     setStep("loading");
@@ -472,14 +469,14 @@ export default function App() {
     const dbMatches = matchDiseases(form.symptoms);
     const topDiseasesFromDB = dbMatches.map(d => `${d.name} (matched symptoms: ${d.matchedSymptoms.join(", ")})`).join("\n");
     const bodyPartsText = selectedBodyParts.length > 0 ? `Affected body parts: ${selectedBodyParts.join(", ")}` : "";
-    
+    const severityText = severitySymptoms.map(s => `${s.key} severity: ${form["severity_" + s.key]}/10`).join(", ");
     const langName = LANGUAGES.find(l => l.code === selectedLanguage)?.label || "English";
     const langInstruction = selectedLanguage !== "en"
       ? `Respond ENTIRELY in ${langName} language. Keep disease names in English only. Translate ALL other text including summary, descriptions, advice, diet category names, and all labels to ${langName}.`
       : "";
     const reportNote = uploadedFile ? "key findings" : "";
     const reportText = uploadedFile ? `Medical report "${uploadedFile.name}" uploaded. Consider this too.` : "";
-    const prompt = `You are a rare disease diagnostic assistant. Based on verified Orphanet database matching, these diseases were identified as possible matches:\n\n${topDiseasesFromDB}\n\nPatient info:\nAge: ${form.age}, Gender: ${form.gender}, Symptoms: ${form.symptoms}\n${bodyPartsText}\nDuration: ${form.duration}, Tests done: ${form.testsAlreadyDone}\n${reportText}\n${langInstruction}\n\nProvide enriched diagnosis. Return ONLY this JSON:\n{"summary":"brief summary","reportFindings":"${reportNote}","riskScore":72,"similarStories":["story1","story2","story3"],"possibleConditions":[{"name":"Disease","confidence":"High/Medium/Low","confidencePercent":85,"description":"brief","affectedPeople":"number","avgDiagnosisTime":"time","nextSteps":"tests","treatmentTimeline":["Week 1-2: tests","Month 1: specialist","Month 2-3: treatment","Month 6+: monitoring"]}],"urgency":"Immediate/Soon/Routine","generalAdvice":"advice","dietTips":[{"icon":"🥗","category":"Diet","advice":"advice"},{"icon":"💧","category":"Hydration","advice":"advice"},{"icon":"🏃","category":"Exercise","advice":"advice"},{"icon":"😴","category":"Sleep","advice":"advice"},{"icon":"🧘","category":"Stress","advice":"advice"}]}`;
+    const prompt = `You are a rare disease diagnostic assistant. Based on verified Orphanet database matching, these diseases were identified as possible matches:\n\n${topDiseasesFromDB}\n\nPatient info:\nAge: ${form.age}, Gender: ${form.gender}, Symptoms: ${form.symptoms}\nSeverity: ${severityText}\n${bodyPartsText}\nDuration: ${form.duration}, Tests done: ${form.testsAlreadyDone}\n${reportText}\n${langInstruction}\n\nProvide enriched diagnosis. Return ONLY this JSON:\n{"summary":"brief summary","reportFindings":"${reportNote}","riskScore":72,"similarStories":["story1","story2","story3"],"possibleConditions":[{"name":"Disease","confidence":"High/Medium/Low","confidencePercent":85,"description":"brief","affectedPeople":"number","avgDiagnosisTime":"time","nextSteps":"tests","treatmentTimeline":["Week 1-2: tests","Month 1: specialist","Month 2-3: treatment","Month 6+: monitoring"]}],"urgency":"Immediate/Soon/Routine","generalAdvice":"advice","dietTips":[{"icon":"🥗","category":"Diet","advice":"advice"},{"icon":"💧","category":"Hydration","advice":"advice"},{"icon":"🏃","category":"Exercise","advice":"advice"},{"icon":"😴","category":"Sleep","advice":"advice"},{"icon":"🧘","category":"Stress","advice":"advice"}]}`;
     try {
       const parts = [];
       if (uploadedFileBase64 && uploadedFileMime) parts.push({ inline_data: { mime_type: uploadedFileMime, data: uploadedFileBase64 } });
@@ -495,8 +492,7 @@ export default function App() {
       setResult(parsed);
       setChatMessages([{ role: "assistant", text: uploadedFile ? t.chatWelcomeReport : t.chatWelcome }]);
       setStep("result");
-    }   catch { alert("Something went wrong. Check your API key."); setStep("form"); }
-
+    } catch { alert("Something went wrong. Check your API key."); setStep("form"); }
   };
 
   const sendChat = async () => {
@@ -519,12 +515,19 @@ export default function App() {
     setStep("form"); setResult(null); setChatMessages([]);
     setUploadedFile(null); setUploadedFileBase64(null); setUploadedFileMime(null);
     setSelectedBodyParts([]); setReminderSet(false);
-   setForm({ age: "", gender: "", symptoms: "", duration: "", testsAlreadyDone: "" });
+    setForm({ age: "", gender: "", symptoms: "", duration: "", testsAlreadyDone: "", severity_Pain: 0, severity_Fatigue: 0, severity_Fever: 0, severity_Nausea: 0 });
   };
 
   const urgencyColor = { Immediate: "#ff4444", Soon: "#ffaa00", Routine: "#00d4aa" };
   const cc = (c) => c === "High" ? "#4d9fff" : c === "Medium" ? "#ffaa00" : "#5a8090";
   const riskColor = (s) => s > 70 ? "#ff4444" : s > 40 ? "#ffaa00" : "#00d4aa";
+
+  if (showEncyclopedia) {
+    return <Encyclopedia onBack={(symptoms) => {
+      setShowEncyclopedia(false);
+      if (symptoms) setForm(prev => ({ ...prev, symptoms }));
+    }} language={selectedLanguage} />;
+  }
 
   return (
     <div className="raredx-wrap">
@@ -536,11 +539,15 @@ export default function App() {
           </div>
           <p>{t.subtitle}</p>
           <div className="stats">
-            {[[t.stat1Num, t.stat1], [t.stat2Num, t.stat2], [t.stat3Num, t.stat3]].map(([n, l]) => (
+            {[["300M+", t.stat1], ["4,000+", t.stat2], ["4–5 yrs", t.stat3]].map(([n, l]) => (
               <div key={n} className="stat-card"><div className="stat-num">{n}</div><div className="stat-label">{l}</div></div>
             ))}
           </div>
-          <div style={{ marginBottom: "14px" }}>
+          <div style={{ marginBottom: "14px", display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
+            <button onClick={() => setShowEncyclopedia(true)}
+              style={{ padding: "8px 20px", background: "linear-gradient(135deg, rgba(0,100,255,0.15), rgba(0,200,150,0.1))", border: "1px solid rgba(0,150,255,0.3)", borderRadius: "20px", color: "#4d9fff", cursor: "pointer", fontSize: "0.85rem", fontFamily: "inherit", transition: "all 0.2s", fontWeight: "600" }}>
+              {t.encyclopediaBtn}
+            </button>
             <button onClick={() => setShowHistory(!showHistory)}
               style={{ padding: "7px 18px", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "20px", color: "#6a8aaa", cursor: "pointer", fontSize: "0.82rem", fontFamily: "inherit", transition: "all 0.2s" }}>
               📋 {showHistory ? t.hideHistory : `${t.showHistory} (${history.length})`}
@@ -597,7 +604,7 @@ export default function App() {
             ))}
 
             
-              
+            
 
             {/* Symptoms + Voice */}
             <div className="field">
@@ -696,12 +703,11 @@ export default function App() {
                     const text = `🧬 *RareDx Medical Report*\n\n👤 Patient: ${form.age}yr ${form.gender}\n⚡ Urgency: ${result.urgency}\n🔴 Risk Score: ${result.riskScore}/100\n\n📋 *Summary:*\n${result.summary}\n\n🎯 *Possible Conditions:*\n${result.possibleConditions.map((c, i) => `${i + 1}. ${c.name} (${c.confidence} Match - ${c.confidencePercent}%)\n   ${c.description}\n   ✅ Next Steps: ${c.nextSteps}`).join("\n\n")}\n\n💡 *General Advice:*\n${result.generalAdvice}\n\n⚠️ AI-generated. Always consult a qualified doctor.\n_Generated by RareDx_`;
                     navigator.clipboard.writeText(text);
                     alert("Report copied! Paste in WhatsApp, Email or any app.");
-                    }}>📋 {t.copyBtn}</button>
-                  
+                  }}>📋 Copy</button>
                   <button className="print-btn" onClick={() => {
                     const text = `🧬 RareDx Report - ${form.age}yr ${form.gender} - Risk: ${result.riskScore}/100 - Urgency: ${result.urgency} - ${result.possibleConditions.map(c => c.name).join(", ")}`;
                     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
-                  }}>💚 {t.waBtn}</button>
+                  }}>💚 WA</button>
                 </div>
               </div>
               <p className="summary-text">{result.summary}</p>
@@ -717,7 +723,20 @@ export default function App() {
               </div>
             </div>
 
-           
+            {result.similarStories && result.similarStories.length > 0 && (
+              <div className="card">
+                <div className="section-title" style={{ marginBottom: "14px" }}>{t.similarStories}</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {result.similarStories.map((story, i) => (
+                    <div key={i} style={{ background: "rgba(77,159,255,0.05)", border: "1px solid rgba(77,159,255,0.1)", borderRadius: "10px", padding: "12px 14px", display: "flex", gap: "10px" }}>
+                      <span style={{ fontSize: "1.2rem", flexShrink: 0 }}>💬</span>
+                      <p style={{ color: "#8aabcf", fontSize: "0.87rem", lineHeight: "1.55" }}>{story}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="results-section-title">{t.possibleConditions}</div>
             {result.possibleConditions.map((c, i) => (
               <div key={i} className="condition-card" style={{ borderLeftColor: cc(c.confidence) }}>
@@ -797,7 +816,7 @@ export default function App() {
               <div className="section-title" style={{ marginBottom: "14px" }}>{t.findSpecialist}</div>
               <div className="specialist-grid">
                 {result.possibleConditions.map((c, i) => (
-                  <button key={i} className="specialist-btn" onClick={() => window.open(`https://www.google.com/maps/search/${c.nextSteps.split(",")[0].trim()}+near+me`, "_blank")}>
+                  <button key={i} className="specialist-btn" onClick={() => window.open(`https://www.google.com/maps/search/${c.name.split(" ")[0]}+specialist+near+me`, "_blank")}>
                     🔍 {c.name}
                   </button>
                 ))}
